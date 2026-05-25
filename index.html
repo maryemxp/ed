@@ -1,87 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduWell AI - Final</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<title>EduWell AI Supreme</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="container">
+<div class="glass">
 
-  <div class="hero">
-    <h1>EduWell AI 🚀</h1>
-    <p id="welcome">Welcome</p>
-    <p>Level: <span id="level">1</span> | XP: <span id="xp">0</span> | Points: <span id="points">0</span></p>
-  </div>
+  <header>
+    <h1>EduWell AI ⚡</h1>
+    <p>AI Health • Learning • Motivation</p>
 
-  <div class="cards">
-    <div class="card red"><h2>🧠 Burnout AI</h2></div>
-    <div class="card green"><h2>🏆 Challenges</h2></div>
-    <div class="card purple"><h2>🆘 Silent Help</h2></div>
-    <div class="card yellow"><h2>🥗 Food AI</h2></div>
-    <div class="card blue"><h2>📚 Summary AI</h2></div>
-    <div class="card dark"><h2>📊 Wellness</h2></div>
-  </div>
+    <div class="stats">
+      XP: <span id="xp">0</span> | Level: <span id="level">1</span>
+    </div>
+  </header>
 
-  <div class="grid">
+  <!-- 😴 SLEEP -->
+  <section class="card sleep">
+    <h2>😴 Sleep Motivation</h2>
+    <button onclick="sleepMotivation()">Check Sleep</button>
+    <button onclick="downloadSleep()">Download</button>
+    <p id="sleepMsg"></p>
+  </section>
 
-    <section class="panel burnout-panel">
-      <h2>Burnout AI</h2>
-      <input id="studyHours" type="number" placeholder="Study Hours" />
-      <input id="sleepHours" type="number" placeholder="Sleep Hours" />
-      <input id="screenHours" type="number" placeholder="Screen Time" />
-      <input id="stressLevel" type="number" placeholder="Stress Level" />
-      <button onclick="analyzeBurnout()">Analyze</button>
-      <div id="burnoutResult" class="result"></div>
-    </section>
+  <!-- 📚 AI -->
+  <section class="card ai">
+    <h2>📚 AI Lesson Explainer</h2>
+    <input id="lessonInput" placeholder="Write any lesson">
+    <button onclick="generateSummary()">Generate AI</button>
+    <button onclick="downloadSummary()">Download</button>
+    <p id="summaryResult"></p>
+  </section>
 
-    <section class="panel summary-panel">
-      <h2>Smart Summary</h2>
-      <input id="lessonInput" type="text" placeholder="Lesson" />
-      <button onclick="generateSummary()">Generate</button>
-      <div id="summaryResult" class="result"></div>
-    </section>
+  <!-- 🥗 FOOD -->
+  <section class="card food">
+    <h2>🥗 Food AI</h2>
+    <input id="foodInput" placeholder="Enter food">
+    <button onclick="checkFood()">Analyze</button>
+    <button onclick="downloadFood()">Download</button>
+    <p id="foodResult"></p>
+  </section>
 
-    <section class="panel food-panel">
-      <h2>Food AI</h2>
-      <input id="mealInput" type="text" placeholder="Meal" />
-      <button onclick="analyzeFood()">Analyze</button>
-      <div id="foodResult" class="result"></div>
-    </section>
+  <!-- 🏆 CHALLENGES -->
+  <section class="card challenge">
+    <h2>🏆 Challenges</h2>
 
-    <section class="panel help-panel">
-      <h2>Silent Help</h2>
-      <textarea id="helpMessage"></textarea>
-      <button onclick="sendHelp()">Send</button>
-      <div id="helpResult" class="result"></div>
-    </section>
+    <label><input type="checkbox" onchange="checkDone()"> Drink Water</label><br>
+    <label><input type="checkbox" onchange="checkDone()"> Sleep Early</label><br>
+    <label><input type="checkbox" onchange="checkDone()"> Exercise</label>
 
-    <section class="panel">
-      <h2>Challenges</h2>
-      <div onclick="toggleChallenge(this)" class="challenge">Drink Water</div>
-      <div onclick="toggleChallenge(this)" class="challenge">Sleep Early</div>
-      <div onclick="toggleChallenge(this)" class="challenge">Exercise</div>
-      <div onclick="toggleChallenge(this)" class="challenge">No Social Media</div>
-    </section>
+    <p id="congrats"></p>
 
-    <section class="panel blue">
-      <h2>Chart</h2>
-      <canvas id="chart" width="300" height="150"></canvas>
-    </section>
-
-    <section class="panel purple">
-      <h2>Badges</h2>
-      <div id="badges"></div>
-    </section>
-
-  </div>
+    <button onclick="downloadChallenge()">Download Progress</button>
+  </section>
 
 </div>
 
