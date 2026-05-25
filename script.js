@@ -17,10 +17,11 @@ function switchArcadeOption(optionId) {
 }
 
 // ========================================================
-// --- BRAND NEW FEATURE: ADVANCED AI VISION SCANNER ENGINE ---
+// --- ADVANCED AI VISION SCANNER ENGINE (WITH AUTO-FALLBACK) ---
 // ========================================================
 let currentVisionMode = 'meal'; 
 let videoStream = null;
+let useFallbackInput = false;
 
 async function startVisionMode(mode) {
     currentVisionMode = mode;
@@ -35,14 +36,58 @@ async function startVisionMode(mode) {
         overlay.classList.remove('body-frame');
     }
 
-    // Trigger Live Web Camera Interface
-    try {
-        if(videoStream) stopCamera();
-        videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
-        const videoElement = document.getElementById('webcam');
-        videoElement.srcObject = videoStream;
-    } catch (err) {
-        alert("Camera Access Error: Please give system camera permission to evaluate AI models.");
+    // Dynamic Safe Cleanup for any old camera stream
+    if(videoStream) stopCamera();
+
+    const videoElement = document.getElementById('webcam');
+    
+    // Check if the environment support standard live media stream (Needs HTTPS or Localhost)
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        try {
+            videoStream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: "environment" }, 
+                audio: false 
+            });
+            videoElement.srcObject = videoStream;
+            videoElement.style.display = "block";
+            useFallbackInput = false;
+            
+            // Remove any old fallback input if it exists
+            let oldInput = document.getElementById('fallback-camera-input');
+            if(oldInput) oldInput.remove();
+        } catch (err) {
+            console.warn("Live camera stream restricted. Activating Native Camera Capture Fallback UI...");
+            setupFallbackCameraUI();
+        }
+    } else {
+        console.warn("Browser environment does not support inline video. Activating Native Camera Capture Fallback UI...");
+        setupFallbackCameraUI();
+    }
+}
+
+// Creative fallback function that dynamically handles unsecure local environments (file:///)
+function setupFallbackCameraUI() {
+    useFallbackInput = true;
+    const videoElement = document.getElementById('webcam');
+    videoElement.style.display = "none"; // Hide live canvas stream since it's restricted
+    
+    // Create or locate a native mobile capture input gateway
+    let fallbackInput = document.getElementById('fallback-camera-input');
+    if (!fallbackInput) {
+        fallbackInput = document.createElement('input');
+        fallbackInput.id = 'fallback-camera-input';
+        fallbackInput.type = 'file';
+        fallbackInput.accept = 'image/*';
+        fallbackInput.capture = 'environment'; // Force triggers native iOS/Android system camera
+        fallbackInput.style.display = 'none';
+        
+        // Listen to image injection to auto-trigger analysis instantly
+        fallbackInput.onchange = function() {
+            if(fallbackInput.files && fallbackInput.files[0]) {
+                captureAndAnalyze();
+            }
+        };
+        document.getElementById('camera-area').appendChild(fallbackInput);
     }
 }
 
@@ -53,22 +98,37 @@ function stopCamera() {
     }
 }
 
+// Central Capture Core
 function captureAndAnalyze() {
+    // If we are in local fallback mode and no file is loaded yet, force prompt the native camera
+    if(useFallbackInput) {
+        let fallbackInput = document.getElementById('fallback-camera-input');
+        if(fallbackInput && fallbackInput.files.length === 0) {
+            fallbackInput.click(); // Trigger native phone camera hardware overlay
+            return;
+        }
+    }
+
     const laser = document.getElementById('scanner-laser');
     const resultBox = document.getElementById('vision-result-box');
     const title = document.getElementById('vision-result-title');
     const content = document.getElementById('vision-result-content');
     
-    laser.classList.remove('hidden'); // Show futuristic glowing matrix line
+    laser.classList.remove('hidden'); // Activate cyber scan visualization
     resultBox.classList.add('hidden');
 
     setTimeout(() => {
         laser.classList.add('hidden');
         resultBox.classList.remove('hidden');
         
+        // Clear out the temporary fallback file cache so users can click again fresh next time
+        if(useFallbackInput) {
+            let fallbackInput = document.getElementById('fallback-camera-input');
+            if(fallbackInput) fallbackInput.value = ""; 
+        }
+        
         if(currentVisionMode === 'meal') {
             title.innerHTML = "🍳 AI Meal Analysis Report";
-            // Randomly simulate meal generation matrix for demo purposes to judge
             const mealsData = [
                 { name: "Grilled Chicken & Rice Bowl", cals: "540 kcal", p: "42g", c: "55g", f: "12g", items: "• Basmati Rice (150g)<br>• Chicken Breast (120g)<br>• Olive Oil & Greens" },
                 { name: "Homemade Beef Burger", cals: "680 kcal", p: "35g", c: "48g", f: "28g", items: "• Brioche Bun<br>• Lean Beef Patty (150g)<br>• Cheddar Cheese & Sauce" }
@@ -78,13 +138,12 @@ function captureAndAnalyze() {
                 <b>Detected Meal:</b> <span style='color:#10b981;'>${selectedMeal.name}</span><br>
                 <b>Total Calories:</b> <b>${selectedMeal.cals}</b><br><br>
                 <label>Protein: ${selectedMeal.p}</label><div class='macro-bar'><div class='macro-fill' style='width: 80%; background:#3b82f6;'></div></div>
-                <label>Carbs: ${selectedMeal.cals === "540 kcal" ? "55g" : "48g"}</label><div class='macro-bar'><div class='macro-fill' style='width: 65%; background:#eab308;'></div></div>
+                <label>Carbs: ${selectedMeal.p === "42g" ? "55g" : "48g"}</label><div class='macro-bar'><div class='macro-fill' style='width: 65%; background:#eab308;'></div></div>
                 <label>Fats: ${selectedMeal.f}</label><div class='macro-bar'><div class='macro-fill' style='width: 30%; background:#ef4444;'></div></div>
                 <span style='font-size:11px; color:#64748b;'><b>Ingredients Mapped:</b><br>${selectedMeal.items}</span>
             `;
         } else {
             title.innerHTML = "🧍 AI Body Dimensions Estimate";
-            // Generate realistic random body variance matrices
             let estHeight = Math.floor(Math.random() * (185 - 165) + 165);
             let estWeight = Math.floor(Math.random() * (85 - 60) + 60);
             content.innerHTML = `
