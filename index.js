@@ -12,55 +12,51 @@ function addXP(v) {
   update();
 }
 
-//
-// 😴 Sleep Motivation (تحفيز ذكي)
-//
+/* 😴 Sleep Motivation */
 function sleepMotivation() {
   const msgs = [
-    "😴 Sleep is your superpower!",
-    "💙 Rest = better brain performance",
-    "⚡ Good sleep makes you smarter!",
-    "🧠 Your brain is recharging..."
+    "😴 Sleep = Brain Power Boost!",
+    "⚡ Rest improves memory & focus",
+    "🧠 Your brain needs recovery!",
+    "💙 Good sleep = better grades!"
   ];
 
-  const msg = msgs[Math.floor(Math.random() * msgs.length)];
+  let msg = msgs[Math.floor(Math.random() * msgs.length)];
   document.getElementById("sleepMsg").innerText = msg;
 
   addXP(10);
 }
 
-//
-// 📚 AI Summary (ANY LANGUAGE SUPPORTED)
-//
+/* 📚 AI SUMMARY (multi-language simple smart system) */
 function generateSummary() {
   let text = document.getElementById("lessonInput").value;
 
   if (!text) return;
 
-  let summary = "📚 Explanation: " + text;
+  let result = "📚 Explanation: " + text;
 
-  // تحسين بسيط حسب اللغة
-  if (text.match(/[à-ÿ]/i)) {
-    summary = "📚 Explication du cours: " + text;
-  }
-  if (text.match(/[\u0600-\u06FF]/)) {
-    summary = "📚 شرح الدرس: " + text;
+  // Arabic detection
+  if (/[\u0600-\u06FF]/.test(text)) {
+    result = "📚 شرح الدرس: " + text;
   }
 
-  document.getElementById("summaryResult").innerText = summary;
+  // French detection
+  if (/[à-ÿ]/i.test(text)) {
+    result = "📚 Explication du cours: " + text;
+  }
+
+  document.getElementById("summaryResult").innerText = result;
 
   addXP(20);
 }
 
-//
-// 🥗 Food check
-//
+/* 🥗 Food AI */
 function checkFood() {
   let food = document.getElementById("foodInput").value.toLowerCase();
 
   let result = "🟢 Healthy choice";
 
-  if (food.includes("burger") || food.includes("cola")) {
+  if (food.includes("burger") || food.includes("cola") || food.includes("pizza")) {
     result = "🔴 Try healthier food";
   }
 
@@ -69,15 +65,11 @@ function checkFood() {
   addXP(10);
 }
 
-//
-// 🏆 Challenges + CONGRATULATIONS
-//
+/* 🏆 Challenges */
 function challengeDone(el) {
-  if (el.checked) {
-    addXP(15);
-  }
+  addXP(15);
 
-  let all = document.querySelectorAll("input[type=checkbox]");
+  let all = document.querySelectorAll("input[type='checkbox']");
   let done = [...all].every(x => x.checked);
 
   if (done) {
@@ -88,4 +80,5 @@ function challengeDone(el) {
   }
 }
 
+/* init */
 update();
