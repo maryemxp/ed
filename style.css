@@ -1,48 +1,259 @@
+/* Base Styles & Fresh Color Palette */
+:root {
+    --bg-gradient: linear-gradient(135deg, #e0f7fa 0%, #fff9c4 100%);
+    --primary-color: #4fc3f7;
+    --primary-hover: #03a9f4;
+    --health-color: #ff8a80;
+    --study-color: #b2dfdb;
+    --fun-color: #d1c4e9;
+    --text-color: #37474f;
+    --card-bg: rgba(255, 255, 255, 0.9);
+}
+
 body {
-  margin: 0;
-  font-family: Arial;
-  background: linear-gradient(135deg,#0f172a,#1e293b);
-  color: white;
-  text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .screen {
-  display: none;
-  padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-sizing: border-box;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
-.active {
-  display: block;
+.hidden {
+    display: none !important;
 }
 
-button {
-  padding: 10px;
-  margin: 5px;
-  width: 200px;
-  border-radius: 10px;
-  border: none;
-  background: #3b82f6;
-  color: white;
-  cursor: pointer;
+/* Header */
+header h1 {
+    color: #263238;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+header p {
+    font-size: 14px;
+    color: #78909c;
 }
 
-button:hover {
-  background: #2563eb;
+/* Menu Dashboard Grid */
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
 }
 
+.menu-card {
+    padding: 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.menu-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.health-card { background-color: #ffebee; color: #c62828; }
+.study-card { background-color: #e0f2f1; color: #00695c; }
+.fun-card { background-color: #ede7f6; color: #4527a0; }
+
+.menu-card .icon {
+    font-size: 30px;
+}
+
+/* Back Button */
+.back-btn {
+    background: none;
+    border: none;
+    color: #546e7a;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    float: left;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Cards & Components inside screens */
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    text-align: left;
+}
+
+h2 { margin-top: 5px; color: #37474f; }
+h3 { margin-top: 0; color: #546e7a; border-bottom: 2px solid #f1f5f7; padding-bottom: 8px;}
+
+/* Inputs & Buttons */
+.input-group {
+    margin-bottom: 12px;
+}
+.input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #607d8b;
+}
 input, textarea, select {
-  width: 80%;
-  padding: 10px;
-  margin: 5px;
-  border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #cfd8dc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+    outline: none;
+}
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-color);
 }
 
-.back {
-  background: #ef4444;
+.btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+.btn:hover { background-color: var(--primary-hover); }
+.danger-btn { background-color: #ff8a80; }
+.danger-btn:hover { background-color: #ff5252; }
+
+/* AI Response Box */
+.ai-box {
+    background-color: #e8f5e9;
+    border-left: 5px solid #4caf50;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    color: #2e7d32;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
+/* Checklist Elements */
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+.task-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.congrats-text {
+    color: #2e7d32;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 15px;
+    animation: bounce 0.5s infinite alternative;
+}
+
+/* Study Menu & Inside elements */
+.study-menu, .fun-menu {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.sub-btn { background-color: #90caf9; font-size: 13px; padding: 10px;}
+.sub-btn:hover { background-color: #64b5f6;}
+
+.timer-display {
+    font-size: 45px;
+    font-weight: bold;
+    color: #37474f;
+    margin: 15px 0;
+}
+.small-timer { font-size: 20px; color: #e53935; margin: 5px 0;}
+.timer-status { font-weight: bold; color: #00897b; margin-bottom: 15px;}
+
+/* Math Challenge */
+.math-question {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+    color: #1565c0;
+}
+
+/* Map Explorer */
+.map-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+.country-btn {
+    padding: 10px;
+    border: 1px solid #b0bec5;
+    background: #f8f9fa;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.country-btn:hover { background: #eceff1;}
+.history-box {
+    background: #fffde7;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border-left: 4px solid #fbc02d;
+    font-size: 14px;
+}
+
+/* Canvas drawing zone */
 canvas {
-  background: white;
-  width: 300px;
-  height: 200px;
+    border: 2px dashed #b0bec5;
+    background-color: #ffffff;
+    border-radius: 8px;
+    cursor: crosshair;
+    margin-bottom: 10px;
+}
+
+/* Word Game */
+.scrambled-letters {
+    font-size: 24px;
+    letter-spacing: 5px;
+    font-weight: bold;
+    color: #6a1b9a;
+    margin: 15px 0;
+    text-align: center;
+}
+
+@keyframes bounce {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
 }
