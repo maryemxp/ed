@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EduWell AI Winner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>EduWell AI 🧠💙</h1>
+
+<div class="stats">
+  XP: <span id="xp">0</span> | Level: <span id="level">1</span>
+</div>
+
+<!-- 🧠 Burnout -->
+<div class="card">
+  <h2>Sleep Motivation 😴</h2>
+  <button onclick="sleepMotivation()">Check Sleep</button>
+  <p id="sleepMsg"></p>
+</div>
+
+<!-- 📚 AI Summary -->
+<div class="card">
+  <h2>AI Lesson Summary 📚</h2>
+  <input id="lessonInput" placeholder="Write any lesson in any language">
+  <button onclick="generateSummary()">Generate AI Explanation</button>
+  <p id="summaryResult"></p>
+</div>
+
+<!-- 🥗 Food -->
+<div class="card">
+  <h2>Food Check 🥗</h2>
+  <input id="foodInput" placeholder="Enter meal">
+  <button onclick="checkFood()">Check</button>
+  <p id="foodResult"></p>
+</div>
+
+<!-- 🏆 Challenges -->
+<div class="card">
+  <h2>Daily Challenges 🏆</h2>
+
+  <label><input type="checkbox" onchange="challengeDone(this)"> Drink Water</label><br>
+  <label><input type="checkbox" onchange="challengeDone(this)"> Sleep Early</label><br>
+  <label><input type="checkbox" onchange="challengeDone(this)"> Exercise</label>
+
+  <p id="congrats"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
