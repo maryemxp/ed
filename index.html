@@ -84,16 +84,23 @@
         <h2>📚 Smart Study Zone</h2>
         
         <div class="study-menu">
-            <button class="btn sub-btn" onclick="switchStudyOption('ai-explainer-box')">🤖 AI Explainer</button>
+            <button class="btn sub-btn" onclick="switchStudyOption('flashcard-box'); nextFlashcard();">💡 Flashcards</button>
             <button class="btn sub-btn" onclick="switchStudyOption('pomodoro-box')">⏱ Pomodoro</button>
             <button class="btn sub-btn" onclick="switchStudyOption('math-box'); generateMathQuestion();">🧮 Math 1000</button>
         </div>
 
-        <div id="ai-explainer-box" class="card study-option hidden">
-            <h3>🤖 Universal AI Explainer</h3>
-            <input type="text" id="lesson-topic" placeholder="Type any lesson name...">
-            <button class="btn" onclick="explainLessonAI()" style="margin-top: 8px;">Deconstruct Concept 🧠</button>
-            <div id="lesson-ai-response" class="ai-box hidden" style="background-color: #f0fdf4; border-left-color: #22c55e; color: #14532d;"></div>
+        <div id="flashcard-box" class="card study-option hidden">
+            <h3>💡 Active Recall Flashcards</h3>
+            <p style="font-size: 11px; color: #64748b; text-align: center;">Test your knowledge! Try to recall the definition before flipping.</p>
+            
+            <div class="flashcard-container" onclick="flipFlashcard()">
+                <div class="flashcard-inner" id="flashcard-inner">
+                    <div class="flashcard-front" id="card-front">Concept</div>
+                    <div class="flashcard-back" id="card-back">Hidden Definition</div>
+                </div>
+            </div>
+            
+            <button class="btn sub-btn" onclick="nextFlashcard()" style="margin-top: 10px; background-color: #6c5ce7; color: white;">Next Card ➔</button>
         </div>
 
         <div id="pomodoro-box" class="card study-option hidden">
