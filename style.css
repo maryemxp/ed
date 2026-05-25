@@ -20,7 +20,7 @@ body {
 .menu-container { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
 .menu-card { padding: 20px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: transform 0.2s; font-size: 17px; font-weight: bold; }
 .menu-card:hover { transform: translateY(-2px); }
-.ai-vision-card { background-color: #f0fdfa; color: #0d9488; border: 2px dashed #0d9488; }
+.ai-vision-card { background-color: #f0fdf4; color: #0d9488; border: 2px dashed #0d9488; }
 .health-card { background-color: #fff1f2; color: #be123c; }
 .study-card { background-color: #f8fafc; color: #1e293b; }
 .fun-card { background-color: #faf5ff; color: #6b21a8; }
@@ -33,17 +33,11 @@ h1, h2 { text-align: center; color: #1e1b4b; }
 h3 { margin-top: 0; font-size: 15px; color: #334155; border-bottom: 2px solid #f1f5f9; padding-bottom: 4px; }
 
 input, textarea, select { width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 5px; }
-.btn { background-color: var(--primary-color); color: white; border: none; padding: 11px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; }
+.btn { color: white; border: none; padding: 11px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; }
 .ai-box { padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; line-height: 1.5; border-left: 4px solid; }
 
-/* DYNAMIC AI CAMERA SYSTEM */
-.camera-wrapper { position: relative; width: 100%; height: 260px; background: #000; border-radius: 12px; overflow: hidden; }
-#webcam { width: 100%; height: 100%; object-fit: cover; }
-.camera-overlay { position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; border: 2px dashed rgba(255,255,255,0.6); border-radius: 8px; pointer-events: none; transition: all 0.3s; }
-.camera-overlay.body-frame { top: 5%; left: 25%; width: 50%; height: 90%; border-color: #38bdf8; }
-
-/* SCI-FI LASER SCANNER EFFECT */
-.laser { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(to right, transparent, #38bdf8, transparent); box-shadow: 0 0 12px #38bdf8; animation: scanning 2s linear infinite; pointer-events: none; }
+/* CYBER LASER SCANNER LAYER */
+.laser { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(to right, transparent, #38bdf8, transparent); box-shadow: 0 0 15px #38bdf8; animation: scanning 1.5s linear infinite; pointer-events: none; }
 @keyframes scanning {
     0% { top: 0%; }
     50% { top: 100%; }
@@ -53,7 +47,6 @@ input, textarea, select { width: 100%; padding: 10px; border: 2px solid #e2e8f0;
 .macro-bar { height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 4px; margin-bottom: 8px; }
 .macro-fill { height: 100%; background: #10b981; }
 
-/* HEALTH & EXTRA STYLING */
 .battery-container { width: 100%; height: 22px; background-color: #e2e8f0; border-radius: 15px; position: relative; overflow: hidden; margin-top: 8px; }
 #battery-bar { height: 100%; width: 100%; background: #22c55e; transition: width 0.4s; }
 #battery-text { position: absolute; width: 100%; text-align: center; top: 2px; font-size: 12px; font-weight: 800; }
@@ -75,7 +68,7 @@ canvas { border: 2px dashed #cbd5e1; background: #fff; border-radius: 10px; disp
 .puzzle-cell { background: #ffffff; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; color: #475569; cursor: pointer; user-select: none; }
 .puzzle-cell.empty { background: #cbd5e1; box-shadow: none; }
 
-/* MAP & MEMORY STYLES */
+/* MAP & ARCADE GAMES */
 .map-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
 .map-node { background: #fff; border: 2px solid #fcd34d; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; text-align: center; }
 .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 15px auto; }
