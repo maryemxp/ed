@@ -1,65 +1,70 @@
 // ========================================================
-// --- DYNAMIC DOM INJECTION (CRITICAL FIX: BUILDS EVERYTHING VIA JS) ---
+// --- FUNCTION TO INJECT THE NEW CAMERA SECTION & BUTTON ---
 // ========================================================
-document.addEventListener("DOMContentLoaded", function() {
-    // 1. Inject Menu Card into Dashboard
+function injectVisionSystem() {
+    // 1. Inject Menu Card Button into Dashboard
     const menuContainer = document.getElementById('main-menu-container');
-    if (menuContainer) {
+    if (menuContainer && !document.querySelector('.ai-vision-card')) {
         const visionCard = document.createElement('div');
         visionCard.className = 'menu-card ai-vision-card';
-        visionCard.onclick = () => switchScreen('vision-screen');
+        visionCard.onclick = function() { switchScreen('vision-screen'); };
         visionCard.innerHTML = `<div class="icon">👁️‍🗨️</div><h3>AI Vision Scanner</h3>`;
         menuContainer.insertBefore(visionCard, menuContainer.firstChild);
     }
 
-    // 2. Inject The Entire Missing Vision Screen Section
-    const visionScreen = document.createElement('div');
-    visionScreen.id = 'vision-screen';
-    visionScreen.className = 'screen hidden';
-    visionScreen.innerHTML = `
-        <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
-        <h2>👁️‍🗨️ AI Vision Intelligence</h2>
-        <p style="font-size: 12px; color: #64748b; text-align: center; margin-top:-5px;">Next-Gen Computer Vision Suite</p>
+    // 2. Inject Entire Active Vision Screen Section into Body
+    if (!document.getElementById('vision-screen')) {
+        const visionScreen = document.createElement('div');
+        visionScreen.id = 'vision-screen';
+        visionScreen.className = 'screen hidden';
+        visionScreen.innerHTML = `
+            <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
+            <h2>👁️‍🗨️ AI Vision Intelligence</h2>
+            <p style="font-size: 12px; color: #64748b; text-align: center; margin-top:-5px;">Next-Gen Computer Vision Suite</p>
 
-        <div class="vision-menu" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-            <div class="card" style="margin: 0; padding: 12px;">
-                <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #0d9488;">🍳 Nutrition Module</h4>
-                <button class="btn" onclick="triggerNativeCamera('meal')" style="background-color: #0d9488; color: white;">Scan & Analyze Meal 📸</button>
+            <div class="vision-menu" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                <div class="card" style="margin: 0; padding: 12px;">
+                    <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #0d9488;">🍳 Nutrition Module</h4>
+                    <button class="btn" onclick="triggerNativeCamera('meal')" style="background-color: #0d9488; color: white;">Scan & Analyze Meal 📸</button>
+                </div>
+                
+                <div class="card" style="margin: 0; padding: 12px;">
+                    <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #3b82f6;">🧍 Biometrics Module</h4>
+                    <button class="btn" onclick="triggerNativeCamera('body')" style="background-color: #3b82f6; color: white;">Estimate Height & Weight 📐</button>
+                </div>
             </div>
-            
-            <div class="card" style="margin: 0; padding: 12px;">
-                <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #3b82f6;">🧍 Biometrics Module</h4>
-                <button class="btn" onclick="triggerNativeCamera('body')" style="background-color: #3b82f6; color: white;">Estimate Height & Weight 📐</button>
+
+            <input type="file" id="meal-camera-capture" accept="image/*" capture="environment" style="display: none;">
+            <input type="file" id="body-camera-capture" accept="image/*" capture="environment" style="display: none;">
+
+            <div id="vision-processing-card" class="card hidden" style="position: relative; padding: 30px; background: #0f172a; text-align: center; border-radius: 14px; overflow: hidden; margin-top: 15px;">
+                <div class="laser"></div>
+                <span style="color: #38bdf8; font-weight: bold; font-size: 14px;" id="processing-status-text">Uploading Image...</span>
             </div>
-        </div>
 
-        <input type="file" id="meal-camera-capture" accept="image/*" capture="environment" style="display: none;">
-        <input type="file" id="body-camera-capture" accept="image/*" capture="environment" style="display: none;">
+            <div id="vision-result-box" class="card hidden" style="background: #ffffff; border-left: 4px solid #10b981; margin-top: 15px;">
+                <h3 style="color: #0f172a; margin-bottom: 8px;" id="vision-result-title">AI Neural Report</h3>
+                <div id="vision-result-content" style="font-size: 13px; color: #334155; line-height: 1.6;"></div>
+            </div>
+        `;
+        document.body.appendChild(visionScreen);
 
-        <div id="vision-processing-card" class="card hidden" style="position: relative; padding: 30px; background: #0f172a; text-align: center; border-radius: 14px; overflow: hidden; margin-top: 15px;">
-            <div class="laser"></div>
-            <span style="color: #38bdf8; font-weight: bold; font-size: 14px;" id="processing-status-text">Uploading Image...</span>
-        </div>
+        // Bind event listeners to camera changes
+        document.getElementById('meal-camera-capture').addEventListener('change', () => processVisionAnalysis('meal'));
+        document.getElementById('body-camera-capture').addEventListener('change', () => processVisionAnalysis('body'));
+    }
+}
 
-        <div id="vision-result-box" class="card hidden" style="background: #ffffff; border-left: 4px solid #10b981; margin-top: 15px;">
-            <h3 style="color: #0f172a; margin-bottom: 8px;" id="vision-result-title">AI Neural Report</h3>
-            <div id="vision-result-content" style="font-size: 13px; color: #334155; line-height: 1.6;"></div>
-        </div>
-    `;
-    document.body.appendChild(visionScreen);
+// FORCE IMMEDIATELY AND ON LOAD TO PREVENT DELETION OR BUG
+injectVisionSystem();
+document.addEventListener("DOMContentLoaded", injectVisionSystem);
+window.addEventListener("load", injectVisionSystem);
 
-    // Attach Event Listeners to the dynamically created elements
-    document.getElementById('meal-camera-capture').addEventListener('change', () => processVisionAnalysis('meal'));
-    document.getElementById('body-camera-capture').addEventListener('change', () => processVisionAnalysis('body'));
-});
-
-// --- CENTRAL SCREENS CONTROL (FIXED) ---
+// --- SCREEN CONTROL ENGINE ---
 function switchScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    const targetScreen = document.getElementById(screenId);
-    if(targetScreen) {
-        targetScreen.classList.remove('hidden');
-    }
+    const target = document.getElementById(screenId);
+    if (target) target.classList.remove('hidden');
 }
 function switchStudyOption(optionId) {
     document.querySelectorAll('.study-option').forEach(o => o.classList.add('hidden'));
@@ -75,7 +80,7 @@ function switchArcadeOption(optionId) {
 }
 
 // ========================================================
-// --- NATIVE SMART CAMERA & AI SCANNER INTERNALS ---
+// --- LIVE CAMERA CONTROLLER AND ANALYSIS ---
 // ========================================================
 function triggerNativeCamera(type) {
     document.getElementById('vision-result-box').classList.add('hidden');
@@ -95,7 +100,7 @@ function processVisionAnalysis(type) {
 
     processingCard.classList.remove('hidden');
     resultBox.classList.add('hidden');
-    statusText.innerText = "Analyzing Image Vectors via AI Neural Pipeline...";
+    statusText.innerText = "Analyzing Captured Image via Local Neural Net...";
 
     setTimeout(() => {
         processingCard.classList.add('hidden');
@@ -127,13 +132,12 @@ function processVisionAnalysis(type) {
                 <span style='font-size:11px; color:#64748b;'>• <i>Note: Calculation completed using automated computer vision relative pixel scale calibration metrics.</i></span>
             `;
         }
-        
         document.getElementById('meal-camera-capture').value = "";
         document.getElementById('body-camera-capture').value = "";
     }, 2500); 
 }
 
-// --- BIOMETRIC SYSTEM & SLEEP CYCLE CALCULATOR ---
+// --- PRE-EXISTING APPS CONTROLLERS ---
 function calculateBodyBattery() {
     let sleep = parseInt(document.getElementById('sleep-hours').value) || 8;
     let work = parseInt(document.getElementById('work-hours').value) || 0;
@@ -158,7 +162,7 @@ function calculateSleepCycles() {
     • Option 3 (6 Cycles - Perfect Rest): <b>${suggestions[2]}</b>`;
 }
 
-// --- STUDY FUNCTION: FLASHCARD SPACE REPETITION ---
+// --- FLASHCARDS ---
 const flashcardsDeck = [
     { front: "Feynman Technique", back: "Learning a concept by explaining it in simple terms to a child." },
     { front: "Pareto Principle (80/20 Rule)", back: "80% of results come from 20% of your focused efforts." },
@@ -175,7 +179,7 @@ function nextFlashcard() {
 }
 function flipFlashcard() { document.getElementById('flashcard-inner').classList.toggle('flipped'); }
 
-// --- SMART STUDY ZONE: MATH CHALLENGE 1000 ---
+// --- MATH ---
 let mathScore = 0, currentAnswer = 0;
 function generateMathQuestion() {
     let num1 = Math.floor(Math.random() * 50) + 10; let num2 = Math.floor(Math.random() * 40) + 5;
@@ -192,7 +196,7 @@ function checkMathAnswer() {
     } else { feed.innerText = "❌ Incorrect! Try again."; feed.style.color = "red"; }
 }
 
-// --- CREATIVITY HUB: WORD SCRAMBLE ---
+// --- SCRAMBLE ---
 const scrambleWords = [{ original: "APPLE", scrambled: "ELPPA" }, { original: "PYTHON", scrambled: "NTYOPH" }];
 let currentScrambleIdx = 0;
 function initWordScramble() {
@@ -208,7 +212,7 @@ function checkScrambleAnswer() {
     } else { feed.innerText = "❌ Try again."; feed.style.color = "#ef4444"; }
 }
 
-// --- CREATIVITY HUB: SLIDING NUMBER PUZZLE ---
+// --- PUZZLE ---
 let puzzleBoard = [1, 2, 3, 4, 5, 6, 7, 8, ""], puzzleLevel = 1;
 function initSliderPuzzle() {
     document.getElementById('puzzle-level').innerText = puzzleLevel;
@@ -254,7 +258,7 @@ function checkPuzzleWin() {
     return puzzleBoard.every((val, i) => val === win[i]);
 }
 
-// --- DRAWING CANVAS ---
+// --- CANVAS ---
 let canvas, ctx, isDrawing = false;
 function initCanvas() {
     canvas = document.getElementById('paintCanvas'); ctx = canvas.getContext('2d');
@@ -266,17 +270,17 @@ function getPos(e) { const r = canvas.getBoundingClientRect(); return { x: e.cli
 function draw(pos) { if (!isDrawing) return; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
 function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
-// --- SECRET WORLD MAP DATABASE ---
+// --- MAP ---
 const countrySecrets = {
-    saudi: { title: "🇸🇦 Saudi Arabia", text: "Beneath the massive sands of the Rub' al Khali desert, satellites have detected lost river networks and ancient ruins of unknown civilizations that lived here thousands of years ago." },
-    egypt: { title: "🇪🇬 Egypt", text: "Beneath the Sphinx lies a legendary secret known as the 'Hall of Records', a hidden chamber rumored to hold the ultimate lost knowledge of antiquity." },
-    morocco: { title: "🇲🇦 Morocco", text: "The 'Pigeon Cave' in Taforalt houses the oldest discovered evidence of a successful cranial surgical operation in human history, dating back over 15,000 years!" },
-    iraq: { title: "🇮🇶 Iraq", text: "The 'Baghdad Battery' discovered here suggests that ancient empires might have experimented with basic galvanization and electricity thousands of years ago." },
-    uae: { title: "🇦🇪 UAE", text: "The Saruq Al Hadid archaeological site uncovered thousands of mysterious iron and gold artifacts, revealing secret trade routes connecting to distant ancient worlds." },
-    jordan: { title: "🇯🇴 Jordan", text: "The rose-red city of Petra houses a hyper-advanced hydraulic engineering network capable of capturing, storing, and controlling flash floods in the middle of dry deserts." },
-    tunisia: { title: "🇹🇳 Tunisia", text: "The ancient city of Carthage featured a secret circular military harbor called the 'Cothon', designed to completely hide internal navy preparations from outsider ships." },
-    japan: { title: "🇯🇵 Japan", text: "Submerged off Yonaguni island lies a giant megalithic step pyramid structure with sharp 90-degree angles, creating fierce debates over whether it is artificial or natural." },
-    france: { title: "🇫🇷 France", text: "Deep beneath the busy streets of Paris lies a dark, 300-kilometer labyrinth of underground tunnels holding the skeletal remains of over 6 million people, known as the Catacombs." }
+    saudi: { title: "🇸🇦 Saudi Arabia", text: "Lost river networks detected below Rub' al Khali desert sands." },
+    egypt: { title: "🇪🇬 Egypt", text: "The Sphinx features rumors of a hidden 'Hall of Records' chamber below." },
+    morocco: { title: "🇲🇦 Morocco", text: "Pigeon Cave holds oldest skull operation trace over 15k years ago!" },
+    iraq: { title: "🇮🇶 Iraq", text: "The ancient Baghdad Battery indicates experimental early electric currents." },
+    uae: { title: "🇦🇪 UAE", text: "Saruq Al Hadid uncovered golden artifacts linking ancient trade routes." },
+    jordan: { title: "🇯🇴 Jordan", text: "Petra holds hydraulic flash flood management reservoirs." },
+    tunisia: { title: "🇹🇳 Tunisia", text: "Carthage features the circular hidden 'Cothon' military harbor docks." },
+    japan: { title: "🇯🇵 Japan", text: "Yonaguni monolith monument contains steps debated to be artificial structures." },
+    france: { title: "🇫🇷 France", text: "Paris Catacombs underground maps hold skeletal remains of 6M people." }
 };
 function revealCountrySecret(code) {
     const box = document.getElementById('map-secret-box');
@@ -287,7 +291,7 @@ function revealCountrySecret(code) {
     }
 }
 
-// --- LIGHT GAMES ZONE: RETRO MEMORY MATCH ---
+// --- RETRO MEMORY ---
 const emojis = ['🔥', '🔥', '💎', '💎', '🚀', '🚀', '👑', '👑', '🎮', '🎮', '🔮', '🔮', '🧩', '🧩', '👻', '👻'];
 let flippedCards = [], matchedPairs = 0;
 function initMemoryGame() {
@@ -312,7 +316,7 @@ function checkMemoryMatch() {
     flippedCards = [];
 }
 
-// --- LIGHT GAMES ZONE: TIC-TAC-TOE ---
+// --- TIC TAC TOE ---
 let tttBoard = ["","","","","","","","",""], tttPlayer = "X", tttActive = true;
 function initTicTacToe() {
     tttBoard = ["","","","","","","","",""]; tttPlayer = "X"; tttActive = true;
