@@ -55,10 +55,6 @@
                     <option value="sad">😢 Low Mood</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label>Describe any problem or symptom:</label>
-                <textarea id="health-problem" placeholder="Describe symptoms..."></textarea>
-            </div>
             <button class="btn health-btn" onclick="runAIHealthAdvisor()">Analyze My Well-being</button>
             <div id="ai-response" class="ai-box hidden"></div>
         </div>
@@ -69,6 +65,12 @@
                 <div id="battery-bar" style="width: 100%;"></div>
                 <span id="battery-text">100% Charged</span>
             </div>
+        </div>
+
+        <div class="card sleep-hacker-box">
+            <h3>🌙 Sleep Cycle Optimizer</h3>
+            <button class="btn sub-btn" onclick="calculateSleepCycles()">If I sleep now, when should I wake up?</button>
+            <div id="sleep-results" class="ai-box hidden" style="background-color: #f5f3ff; border-left-color: #8b5cf6; color: #5b21b6;"></div>
         </div>
     </div>
 
@@ -112,7 +114,7 @@
         <div class="study-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 10px;">
             <button class="btn sub-btn" onclick="switchFunOption('canvas-box'); initCanvas();">🎨 Drawing</button>
             <button class="btn sub-btn" onclick="switchFunOption('scramble-box'); initWordScramble();">🔤 Scramble</button>
-            <button class="btn sub-btn" onclick="switchFunOption('puzzle-box'); nextPuzzle();">🧩 Riddle Puzzle</button>
+            <button class="btn sub-btn" onclick="switchFunOption('puzzle-box'); initSliderPuzzle();">🧩 No. Puzzle</button>
         </div>
 
         <div id="canvas-box" class="card fun-option hidden">
@@ -122,7 +124,6 @@
 
         <div id="scramble-box" class="card fun-option hidden">
             <h3>🔤 Word Scramble Challenge</h3>
-            <p style="font-size: 12px; color:#64748b;">Rearrange the letters to guess the correct word:</p>
             <div id="scrambled-word" style="font-size: 22px; font-weight: bold; letter-spacing: 5px; text-align: center; margin: 15px 0; color: #6c5ce7;"></div>
             <input type="text" id="scramble-input" placeholder="Your guess here...">
             <button class="btn" onclick="checkScrambleAnswer()" style="margin-top: 8px;">Verify Word</button>
@@ -130,10 +131,14 @@
         </div>
 
         <div id="puzzle-box" class="card fun-option hidden">
-            <h3>🧩 Logical Riddle Puzzle</h3>
-            <p id="puzzle-question" style="font-size: 14px; font-weight: 500; min-height: 45px; margin-top: 10px;"></p>
-            <input type="text" id="puzzle-input" placeholder="Type your answer...">
-            <button class="btn" onclick="checkPuzzleAnswer()" style="margin-top: 8px;">Submit Solution</button>
+            <h3>🧩 Sliding Number Puzzle</h3>
+            <p style="font-size: 11px; color:#64748b; text-align:center; margin-top:-5px;">Click on blocks adjacent to the empty space to arrange them from 1 to 8!</p>
+            <div style="text-align: center; font-weight: bold; margin-bottom: 8px; color: #d97706;">Stage Level: <span id="puzzle-level">1</span></div>
+            
+            <div class="puzzle-container" id="puzzle-grid">
+                </div>
+            
+            <button class="btn sub-btn" onclick="initSliderPuzzle()" style="margin-top: 12px;">Reshuffle Stage</button>
             <div id="puzzle-feedback" style="text-align: center; font-weight: bold; margin-top: 10px;"></div>
         </div>
     </div>
@@ -150,7 +155,7 @@
             <h3>🐍 Retro Snake Arena</h3>
             <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:5px; font-size:13px;">
                 <span>Score: <span id="snake-score">0</span></span>
-                <span style="color: #ef4444;">Avoid Walls & Tail!</span>
+                <span style="color: #10b981;">Control Smoothly ✨</span>
             </div>
             <canvas id="snakeCanvas" width="300" height="300" style="background: #1e293b; border: 3px solid #475569;"></canvas>
             
