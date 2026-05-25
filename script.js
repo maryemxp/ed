@@ -14,136 +14,72 @@ function switchFunOption(optionId) {
     document.getElementById(optionId).classList.remove('hidden');
 }
 
+function switchArcadeOption(optionId) {
+    document.querySelectorAll('.arcade-option').forEach(a => a.classList.add('hidden'));
+    document.getElementById(optionId).classList.remove('hidden');
+}
 
-// --- HEALTH SECTION: REAL-TIME BODY BATTERY & ADVISOR ---
+
+// --- HEALTH SECTION: BODY BATTERY & SLEEP CYCLES ---
 function calculateBodyBattery() {
     let sleep = parseInt(document.getElementById('sleep-hours').value) || 8;
     let work = parseInt(document.getElementById('work-hours').value) || 0;
     let mood = document.getElementById('anxious-status').value;
-    
-    // Bio-calculation algorithm logic
-    let score = 50;
-    score += (sleep - 7) * 8; // bonus points for sleeping around 8 hours
-    score -= (work * 4);      // drains based on labor intensity
-    
-    if (mood === 'happy') score += 15;
-    if (mood === 'tired') score -= 15;
-    if (mood === 'anxious') score -= 20;
-    if (mood === 'sad') score -= 10;
-    
-    // Bounds limits locking
+    let score = 50 + (sleep - 7) * 8 - (work * 4);
+    if (mood === 'happy') score += 15; if (mood === 'tired') score -= 15; if (mood === 'anxious') score -= 20;
     score = Math.max(5, Math.min(100, score));
-    
-    const bar = document.getElementById('battery-bar');
-    const txt = document.getElementById('battery-text');
-    const advice = document.getElementById('battery-advice');
-    
-    bar.style.width = score + "%";
-    txt.innerText = score + "% Charged";
-    
-    if (score > 75) {
-        bar.style.background = "linear-gradient(90deg, #4ade80, #22c55e)";
-        advice.innerHTML = "🔋 Optimal Vitality. Excellent window for deep analytical studying or creative tasks!";
-    } else if (score >= 40) {
-        bar.style.background = "linear-gradient(90deg, #fbbf24, #f59e0b)";
-        advice.innerHTML = "⚡ Moderate Drain. Refrain from taking over-time duties. Sip 500ml water now.";
-    } else {
-        bar.style.background = "linear-gradient(90deg, #f87171, #ef4444)";
-        advice.innerHTML = "🚨 System Critical! Cortisol levels are peak. Turn on 'Binaural Sleep Waves' and close screens.";
+    document.getElementById('battery-bar').style.width = score + "%";
+    document.getElementById('battery-text').innerText = score + "% Charged";
+    const adv = document.getElementById('battery-advice');
+    if (score > 75) adv.innerHTML = "🔋 Optimal Energy. Perfect time for tough studies or sports.";
+    else if (score >= 40) adv.innerHTML = "⚡ Moderate Drain. Rest soon, hydrate properly.";
+    else adv.innerHTML = "🚨 Low Battery! Rest your brain, turn off all screens.";
+}
+
+function calculateSleepCycles() {
+    const out = document.getElementById('sleep-results'); out.classList.remove('hidden');
+    let now = new Date();
+    let suggestions = [];
+    // Calculate wake up times based on 90-minute sleep cycles (4, 5, and 6 cycles)
+    for (let i = 4; i <= 6; i++) {
+        let cycleTime = new Date(now.getTime() + (i * 90 * 60000) + (14 * 60000)); // 14 mins to fall asleep
+        suggestions.push(cycleTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
     }
+    out.innerHTML = `⏰ <b>Best Wake-Up Times if you sleep now:</b><br>
+    • <b>${suggestions[0]}</b> (4 Cycles - Light)<br>
+    • <b>${suggestions[1]}</b> (5 Cycles - Balanced)<br>
+    • <b>${suggestions[2]}</b> (6 Cycles - Optimal Deep Sleep)<br>
+    Waking up at these times prevents waking up during deep sleep blur!`;
 }
 
 function runAIHealthAdvisor() {
     const sleep = parseInt(document.getElementById('sleep-hours').value) || 0;
-    const work = parseInt(document.getElementById('work-hours').value) || 0;
     const mood = document.getElementById('anxious-status').value;
     const prob = document.getElementById('health-problem').value.toLowerCase();
-    const box = document.getElementById('ai-response');
-    
-    box.classList.remove('hidden');
+    const box = document.getElementById('ai-response'); box.classList.remove('hidden');
     let advice = "🧠 <b>AI Health Insights:</b><br>";
-
-    if (mood === 'anxious' || mood === 'sad' || prob.includes('stress') || prob.includes('sad')) {
-        advice += "• Mind Check: Your emotional baseline is tense. Let's counter this. Activate the <b>Neural Frequency Generator</b> for relief.<br>";
-    }
-    if (sleep < 7 && sleep > 0) {
-        advice += `• Sleep Loss: ${sleep}h halts deep recovery. Expect heavy brain fog. Avoid complex logical loads.<br>`;
-    }
-    if (work > 8) {
-        advice += `• Burnout Threat: Overworking (${work}h) locks muscles. Do basic stretches right now.<br>`;
-    }
-    if (advice === "🧠 <b>AI Health Insights:</b><br>") {
-        advice += "• Metrics perfectly clear! Balance your checklist habits below to retain complete operational momentum.";
-    }
+    if (mood === 'anxious' || prob.includes('stress')) advice += "• Anxiety detected. Please take 5 deep slow breaths now.<br>";
+    if (sleep < 7 && sleep > 0) advice += "• Low sleep reduces memory. Protect your schedule tonight.<br>";
+    if (advice === "🧠 <b>AI Health Insights:</b><br>") advice += "• Systems fully functional. Stay consistent with your active targets.";
     box.innerHTML = advice;
 }
 
-// BINAURAL BEATS SIMULATOR ENGINE (Native Web Audio API Synthesis)
-let audioCtx = null;
-let currentWaveType = null;
-let oscillatorLE, oscillatorRI, gainNode;
-
+// Binaural beats sound simulation audio generator logic
+let audioCtx = null, currentWaveType = null, oscillatorLE, oscillatorRI, gainNode;
 function toggleSoundFrequency(type) {
-    const focusBtn = document.getElementById('sound-focus');
-    const sleepBtn = document.getElementById('sound-sleep');
-    const txt = document.getElementById('sound-status-text');
-
-    if (currentWaveType === type) {
-        // Stop current audio session
-        stopBinauralAudio();
-        return;
-    }
-    
-    stopBinauralAudio(); // cleanup previous
-    currentWaveType = type;
-    
+    const focusBtn = document.getElementById('sound-focus'), sleepBtn = document.getElementById('sound-sleep'), txt = document.getElementById('sound-status-text');
+    if (currentWaveType === type) { stopBinauralAudio(); return; }
+    stopBinauralAudio(); currentWaveType = type;
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    oscillatorLE = audioCtx.createOscillator();
-    oscillatorRI = audioCtx.createOscillator();
-    gainNode = audioCtx.createGain();
-    
-    // Setting target frequency bounds (Simulating therapeutic brain wave adjustments)
-    if (type === 'focus') {
-        oscillatorLE.frequency.value = 200; // Left ear carrier
-        oscillatorRI.frequency.value = 212; // Right ear (12Hz Alpha difference for supreme focus)
-        focusBtn.classList.add('playing');
-        txt.innerText = "Status: Playing Alpha Waves (12Hz) for Max Focus";
-    } else if (type === 'sleep') {
-        oscillatorLE.frequency.value = 150; 
-        oscillatorRI.frequency.value = 153.5; // (3.5Hz Delta difference for deep neural calm)
-        sleepBtn.classList.add('playing');
-        txt.innerText = "Status: Playing Delta Waves (3.5Hz) for Sleep State Induction";
-    }
-    
-    gainNode.gain.value = 0.08; // smooth low volume padding
-    oscillatorLE.connect(gainNode);
-    oscillatorRI.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
-    oscillatorLE.start();
-    oscillatorRI.start();
+    oscillatorLE = audioCtx.createOscillator(); oscillatorRI = audioCtx.createOscillator(); gainNode = audioCtx.createGain();
+    if (type === 'focus') { oscillatorLE.frequency.value = 200; oscillatorRI.frequency.value = 212; focusBtn.classList.add('playing'); txt.innerText = "Playing Focus Waves (12Hz)"; }
+    else { oscillatorLE.frequency.value = 150; oscillatorRI.frequency.value = 153.5; sleepBtn.classList.add('playing'); txt.innerText = "Playing Deep Sleep Waves (3.5Hz)"; }
+    gainNode.gain.value = 0.06; oscillatorLE.connect(gainNode); oscillatorRI.connect(gainNode); gainNode.connect(audioCtx.destination); oscillatorLE.start(); oscillatorRI.start();
 }
-
 function stopBinauralAudio() {
     if (oscillatorLE) { try { oscillatorLE.stop(); oscillatorRI.stop(); } catch(e){} }
-    document.getElementById('sound-focus').classList.remove('playing');
-    document.getElementById('sound-sleep').classList.remove('playing');
-    document.getElementById('sound-status-text').innerText = "Status: Audio Machine Off";
-    currentWaveType = null;
-}
-
-// Digital Detox Countdown Code
-let detoxTimeLeft = 60, detoxInterval;
-function startDetox() {
-    clearInterval(detoxInterval); detoxTimeLeft = 60; document.getElementById('detox-btn').disabled = true;
-    detoxInterval = setInterval(() => {
-        detoxTimeLeft--; document.getElementById('detox-timer').innerText = detoxTimeLeft + "s";
-        if (detoxTimeLeft <= 0) {
-            clearInterval(detoxInterval); document.getElementById('detox-timer').innerText = "Done! ✨";
-            document.getElementById('detox-btn').disabled = false; alert("Detox breathe done! Feeling lighter?");
-        }
-    }, 1000);
+    document.getElementById('sound-focus').classList.remove('playing'); document.getElementById('sound-sleep').classList.remove('playing');
+    document.getElementById('sound-status-text').innerText = "Status: Audio Off"; currentWaveType = null;
 }
 function checkTasks() {
     const t1 = document.getElementById('task1').checked, t2 = document.getElementById('task2').checked, t3 = document.getElementById('task3').checked;
@@ -151,25 +87,14 @@ function checkTasks() {
 }
 
 
-// --- STUDY SECTION: AI LESSON EXPLAINER ---
-const mockLessonAI_Database = {
-    "photosynthesis": "<b>Photosynthesis</b> is how plants produce food. They capture sunlight using green pigments called <i>chlorophyll</i>, absorb carbon dioxide ($CO_2$) from the air, and water ($H_2O$) from the ground. They convert this into glucose (energy sugar) and release clean oxygen ($O_2$) back into our atmosphere!",
-    "quantum physics": "<b>Quantum Physics</b> studies particles smaller than atoms. At this tiny micro-scale, normal laws of physics shatter. Particles can exist in multiple spots simultaneously (Superposition) and influence each other instantly across light-years (Quantum Entanglement).",
-    "world war 2": "<b>World War II (1939-1945)</b> was a vast worldwide conflict pitting the Allied powers (USA, UK, USSR) against the Axis powers (Germany, Japan, Italy). Triggered by Hitler's invasion of Poland, it reshaped maps, accelerated technology, and birthed the United Nations.",
-    "gravity": "<b>Gravity</b> is a natural pull force. Sir Isaac Newton proved objects pull each other based on mass. Later, Albert Einstein updated this by proving massive objects literally curve the fabric of space-time around them like a heavy ball on a trampoline.",
-    "algebra": "<b>Algebra</b> is a math division where symbols and letters (like $x$ and $y$) act as placeholder variables for unknown values. Isolating these variables allows you to build equations to unlock mysteries across code, logic, and physics."
-};
-
+// --- STUDY SECTION: AI EXPLAINER, POMODORO, MATHS ---
 function explainLessonAI() {
     const topic = document.getElementById('lesson-topic').value.trim().toLowerCase();
     const out = document.getElementById('lesson-ai-response'); out.classList.remove('hidden');
-    if (!topic) { out.innerHTML = "Please type a topic name first!"; return; }
-    if (mockLessonAI_Database[topic]) out.innerHTML = `🧠 <b>AI Teacher Response:</b><br>${mockLessonAI_Database[topic]}`;
-    else out.innerHTML = `🧠 <b>AI Teacher Response:</b><br>Here is a structural breakdown of <b>"${topic.toUpperCase()}"</b>:<br>• <b>Core Concept:</b> It is a foundational academic principle widely studied in its field.<br>• <b>Key Mechanism:</b> It involves active operational rules, systemic dependencies, and sequential steps.<br>• <b>Real-world application:</b> Mastered to pass examinations, build engineering projects, or enrich human logic.`;
+    if (!topic) { out.innerHTML = "Type a topic name!"; return; }
+    out.innerHTML = `🧠 <b>AI Structural Breakdown of "${topic.toUpperCase()}":</b><br>• Core Concept: It acts as an essential foundational standard within its educational track.<br>• Operations: Requires strategic rule execution, step dependencies, and formulas.<br>• Reality Impact: Vital to mastering standard testing modules and modern logic construction.`;
 }
 
-
-// --- STUDY SECTION: POMODORO TIMER ---
 let pomodoroInterval, timerMinutes = 25, timerSeconds = 0, isTimerRunning = false, isBreakPeriod = false;
 function togglePomodoro() {
     const btn = document.getElementById('pomodoro-btn');
@@ -182,183 +107,193 @@ function updatePomodoro() {
         if (timerMinutes === 0) {
             isBreakPeriod = !isBreakPeriod; timerMinutes = isBreakPeriod ? 5 : 25;
             status.innerText = isBreakPeriod ? "Break Time! ☕" : "Study Time! 🧠";
-            alert(isBreakPeriod ? "Take a 5-minute break!" : "Back to study!");
+            alert(isBreakPeriod ? "Take a break!" : "Focus time!");
         } else { timerMinutes--; timerSeconds = 59; }
     } else { timerSeconds--; }
     disp.innerText = `${timerMinutes < 10 ? '0' + timerMinutes : timerMinutes}:${timerSeconds < 10 ? '0' + timerSeconds : timerSeconds}`;
 }
 
-
-// --- STUDY SECTION: PROGRESSIVE MATH GAME ---
 let mathLevel = 1, currentMathAns = 0, mathTimeLeft = 15, mathTimerInterval;
-function startMathGame() {
-    document.getElementById('math-game-play').classList.remove('hidden'); document.getElementById('math-game-over').classList.add('hidden');
-    generateMathQuestion();
-}
+function startMathGame() { document.getElementById('math-game-play').classList.remove('hidden'); document.getElementById('math-game-over').classList.add('hidden'); generateMathQuestion(); }
 function generateMathQuestion() {
     clearInterval(mathTimerInterval); document.getElementById('math-level').innerText = mathLevel; document.getElementById('math-answer').value = "";
     let n1 = Math.floor(Math.random() * (mathLevel * 2)) + 2, n2 = Math.floor(Math.random() * (mathLevel * 1.5)) + 2;
-    let op = "+";
-    if (mathLevel > 10) op = Math.random() > 0.5 ? "-" : "+";
-    if (mathLevel > 30) op = Math.random() > 0.6 ? "*" : op;
-    if (op === "+") currentMathAns = n1 + n2; if (op === "-") currentMathAns = n1 - n2; if (op === "*") currentMathAns = n1 * n2;
+    let op = mathLevel > 10 ? (Math.random() > 0.5 ? "-" : "+") : "+";
+    if (op === "+") currentMathAns = n1 + n2; else currentMathAns = n1 - n2;
     document.getElementById('math-question').innerText = `${n1} ${op} ${n2} = ?`;
     mathTimeLeft = Math.max(5, 18 - Math.floor(mathLevel / 25));
-    document.getElementById('math-timer').innerText = "Time Left: " + mathTimeLeft + "s";
-    mathTimerInterval = setInterval(() => { mathTimeLeft--; document.getElementById('math-timer').innerText = "Time Left: " + mathTimeLeft + "s"; if (mathTimeLeft <= 0) endMathGame(false); }, 1000);
+    document.getElementById('math-timer').innerText = mathTimeLeft + "s";
+    mathTimerInterval = setInterval(() => { mathTimeLeft--; document.getElementById('math-timer').innerText = mathTimeLeft + "s"; if (mathTimeLeft <= 0) endMathGame(false); }, 1000);
 }
-function submitMathAnswer() {
-    if (parseInt(document.getElementById('math-answer').value) === currentMathAns) {
-        mathLevel++; if (mathLevel > 1000) endMathGame(true); else generateMathQuestion();
-    } else { endMathGame(false); }
+function submitMathAnswer() { if (parseInt(document.getElementById('math-answer').value) === currentMathAns) { mathLevel++; generateMathQuestion(); } else { endMathGame(false); } }
+function quitMathGame() { endMathGame(false, "Withdrew."); }
+function endMathGame(win, m) { clearInterval(mathTimerInterval); document.getElementById('math-game-play').classList.add('hidden'); document.getElementById('math-game-over').classList.remove('hidden'); document.getElementById('math-result-msg').innerText = m || `Game Over at Level ${mathLevel}`; mathLevel = 1; }
+
+// --- STUDY: FLASHCARD INTELLIGENT MEMORY BOX ---
+let flashcards = [];
+let currentFlashcardIndex = 0;
+let showingFront = true;
+
+function addFlashcard() {
+    const front = document.getElementById('fc-front').value.trim();
+    const back = document.getElementById('fc-back').value.trim();
+    if (front && back) {
+        flashcards.push({ front, back });
+        document.getElementById('fc-front').value = "";
+        document.getElementById('fc-back').value = "";
+        currentFlashcardIndex = flashcards.length - 1;
+        showingFront = true;
+        updateFlashcardDisplay();
+    }
 }
-function quitMathGame() { endMathGame(false, "Withdrew voluntarily."); }
-function endMathGame(win, m) {
-    clearInterval(mathTimerInterval); document.getElementById('math-game-play').classList.add('hidden'); document.getElementById('math-game-over').classList.remove('hidden');
-    document.getElementById('math-result-msg').innerText = win ? "🥇 1000 Level Master!" : (m || `Game Over at Level ${mathLevel}`); mathLevel = 1;
+function flipFlashcard() {
+    if (flashcards.length === 0) return;
+    showingFront = !showingFront;
+    updateFlashcardDisplay();
 }
+function updateFlashcardDisplay() {
+    const display = document.getElementById('flashcard-display');
+    if (flashcards.length === 0) { display.innerText = "👉 Add Cards to Begin"; return; }
+    let card = flashcards[currentFlashcardIndex];
+    display.innerText = showingFront ? `📝 Q: ${card.front}` : `💡 A: ${card.back}`;
+}
+function nextFlashcard() { if (flashcards.length > 0) { currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length; showingFront = true; updateFlashcardDisplay(); } }
+function prevFlashcard() { if (flashcards.length > 0) { currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcards.length) % flashcards.length; showingFront = true; updateFlashcardDisplay(); } }
 
 
-// --- STUDY SECTION: ATLAS MAP DATA ---
-const atlasData = {
-    "Saudi Arabia": { f: "🇸🇦", h: "Birthplace of Islam, historical heart of ancient trade networks. Unified in 1932 by King Abdulaziz into a global modern economic titan." },
-    "Egypt": { f: "🇪🇬", h: "Incredible 5,000+ year pharaonic legacy. Famous for Pyramids, Nile developments, and central Arab cultural leadership." },
-    "USA": { f: "🇺🇸", h: "Gained independence in 1776. Transitioned rapidly via constitutional framework to lead modern industrial and tech landscapes." },
-    "United Kingdom": { f: "🇬🇧", h: "Pioneered the global Industrial Revolution, maritime expansion, and Parliamentary systems widely adopted worldwide." },
-    "China": { f: "🇨🇳", h: "Dynastic roots going back millennia, inventing paper, printing, and gunpowder. Now a premier global production superpower." },
-    "Japan": { f: "🇯🇵", h: "Evolved through Samurai clan eras. Isolated for centuries before modernizing post-Meiji to become a peaceful tech leader." },
-    "Morocco": { f: "🇲🇦", h: "Rich North African hub mixing Islamic, Amazigh, and European heritage. Home to the world's oldest continuously running university." },
-    "Algeria": { f: "🇩🇿", h: "Known as the land of a million martyrs for its historic resistance. Largest geographical country in Africa." },
-    "Tunisia": { f: "🇹🇳", h: "Ancient center of the Carthage empire which challenged Rome. Pivotal Mediterranean trade and learning point." },
-    "UAE": { f: "🇦🇪", h: "Unified federation formed in 1971. Transformed coastal ports into structural, economic, and tourism wonders." },
-    "Jordan": { f: "🇯🇴", h: "Crossroad of civilizations containing historic sites like Petra. Famous for deep cultural continuity and hospitality." },
-    "France": { f: "🇫🇷", h: "Center of Enlightenment philosophy and the 1789 Revolution which reshaped global ideals on liberty and laws." },
-    "Germany": { f: "🇩🇪", h: "Engine of Central European history, printing press origins, scientific excellence, and swift post-war rebuilding." },
-    "Italy": { f: "🇮🇹", h: "Cradle of the massive Roman Empire and the Renaissance movement which ignited modern European art and science." },
-    "Canada": { f: "🇨🇦", h: "Second largest nation on earth, built over vast indigenous history followed by peaceful democratic federation." },
-    "Australia": { f: "🇦🇺", h: "Rich with tens of thousands of years of Aboriginal culture, transitioning into a modern vibrant oceanic continent." },
-    "Brazil": { f: "🇧🇷", h: "Largest South American country, hosting the Amazon biome and Portuguese colonial transformations." },
-    "India": { f: "🇮🇳", h: "Birthplace of major global spiritual traditions, Indus Valley origins, and current largest global democracy." },
-    "South Korea": { f: "🇰🇷", h: "Ancient peninsular kingdom that rapidly transitioned into the modern Han River economic/pop-culture marvel." },
-    "Spain": { f: "🇪🇸", h: "Maritime giant that spearheaded cross-Atlantic exploration networks, creating deep historic ties across Latin America." },
-    "Turkey": { f: "🇹🇷", h: "Bridge between continents, acting as the historical capital core for both Byzantine and Ottoman empires." },
-    "South Africa": { f: "🇿🇦", h: "Rainbow Nation possessing rich tribal histories, famous for its historic triumph over institutional inequality led by Mandela." }
-};
+// --- ATLAS MAP POPULATION ---
+const atlasData = { "Saudi Arabia": "Birthplace of Islam, formed unified state in 1932.", "Egypt": "5000+ years of incredible Pharaonic history and Nile culture.", "USA": "Declared independence in 1776, fast global technology leader." };
 function initAtlasMap() {
-    const container = document.getElementById('dynamic-map-container'); container.innerHTML = "";
-    Object.keys(atlasData).forEach(country => {
-        const btn = document.createElement('button'); btn.className = 'country-btn'; btn.innerHTML = `${atlasData[country].f} ${country}`;
-        btn.onclick = () => { const box = document.getElementById('history-info'); box.classList.remove('hidden'); box.innerHTML = `<b>${atlasData[country].f} ${country} History:</b><br>${atlasData[country].h}`; };
-        container.appendChild(btn);
+    const container = document.getElementById('dynamic-map-container'); if(!container) return; container.innerHTML = "";
+    Object.keys(atlasData).forEach(c => {
+        const b = document.createElement('button'); b.className = 'country-btn'; b.innerText = c;
+        b.onclick = () => { const box = document.getElementById('history-info'); box.classList.remove('hidden'); box.innerHTML = `<b>${c}:</b> ${atlasData[c]}`; };
+        container.appendChild(b);
     });
 }
-document.addEventListener("DOMContentLoaded", () => { initAtlasMap(); calculateBodyBattery(); });
+document.addEventListener("DOMContentLoaded", initAtlasMap);
 
 
-// --- ENTERTAINMENT SECTION: DRAWING BOARD ---
+// --- CREATIVITY: MOBILE DRAWING CANVAS (FIXED TOUCH EVENTS FOR PHONE) ---
 let canvas, ctx, isDrawing = false;
 function initCanvas() {
     canvas = document.getElementById('paintCanvas'); ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#000000'; ctx.lineWidth = 3; ctx.lineCap = 'round';
-    canvas.onmousedown = (e) => { isDrawing = true; paint(e); }; canvas.onmousemove = paint;
+    ctx.strokeStyle = '#000000'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    
+    // Mouse Support
+    canvas.onmousedown = (e) => { isDrawing = true; paint(getMousePos(e)); };
+    canvas.onmousemove = (e) => paint(getMousePos(e));
     canvas.onmouseup = () => { ctx.beginPath(); isDrawing = false; };
+
+    // Mobile Phone Touch Support Fix
+    canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); paint(getTouchPos(e)); }, {passive: false});
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); paint(getTouchPos(e)); }, {passive: false});
+    canvas.addEventListener('touchend', () => { ctx.beginPath(); isDrawing = false; });
 }
-function paint(e) { if (!isDrawing) return; const r = canvas.getBoundingClientRect(); ctx.lineTo(e.clientX - r.left, e.clientY - r.top); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.clientX - r.left, e.clientY - r.top); }
+function getMousePos(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+function getTouchPos(e) { const r = canvas.getBoundingClientRect(); return { x: e.touches[0].clientX - r.left, y: e.touches[0].top - r.top }; }
+function paint(pos) { if (!isDrawing) return; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
 function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
 
-// --- ENTERTAINMENT: LEVEL-BASED WORD UNSCRAMBLE GAME ---
-const puzzleBank = [
-    { original: "APPLE", scrambled: "P - P - L - A - E" },
-    { original: "CODING", scrambled: "G - N - I - D - O - C" },
-    { original: "BRAIN", scrambled: "I - A - R - N - B" },
-    { original: "FUTURE", scrambled: "R - U - T - E - F - I" },
-    { original: "PLANET", scrambled: "N - E - T - L - A - P" }
-];
+// --- CREATIVITY: WORD UNSCRAMBLE GAME ---
+const puzzleBank = [{ original: "APPLE", scrambled: "P-P-L-A-E" }, { original: "CODING", scrambled: "G-N-I-D-O-C" }];
 let currentWordIndex = 0, wordScore = 0, wordLevel = 1;
 function startWordGame() {
     if (currentWordIndex >= puzzleBank.length) currentWordIndex = 0;
     document.getElementById('scrambled-letters').innerText = puzzleBank[currentWordIndex].scrambled;
     document.getElementById('word-input').value = ""; document.getElementById('word-feedback').innerText = "";
-    document.getElementById('word-score').innerText = wordScore; document.getElementById('word-level-display').innerText = wordLevel;
 }
 function checkWordGame() {
-    const userAns = document.getElementById('word-input').value.trim().toUpperCase();
-    if (userAns === puzzleBank[currentWordIndex].original) {
-        document.getElementById('word-feedback').style.color = "#166534"; document.getElementById('word-feedback').innerText = "🎯 Brilliant! Level Cleared!";
-        wordScore += 10; wordLevel++; currentWordIndex++; setTimeout(startWordGame, 1200);
-    } else { document.getElementById('word-feedback').style.color = "#b91c1c"; document.getElementById('word-feedback').innerText = "❌ Incorrect arrangement. Try again!"; }
+    if (document.getElementById('word-input').value.trim().toUpperCase() === puzzleBank[currentWordIndex].original) {
+        currentWordIndex++; wordScore += 10; wordLevel++; startWordGame();
+    } else { document.getElementById('word-feedback').innerText = "❌ Try Again!"; }
 }
 
 
-// --- LEGENDARY ENTERTAINMENT: LEVEL-BASED SLIDING PUZZLE GAME ---
-let puzzleStage = 1, puzzleMoves = 0;
-let correctState = [1, 2, 3, 4, 5, 6, 7, 8, ""];
-let currentState = [];
-
+// --- CREATIVITY: SLIDING PUZZLE GAME ---
+let puzzleStage = 1, correctState = [1,2,3,4,5,6,7,8,""], currentState = [];
 function initPuzzleGame() {
-    puzzleMoves = 0;
-    document.getElementById('puzzle-moves').innerText = puzzleMoves;
-    document.getElementById('puzzle-stage').innerText = puzzleStage;
     document.getElementById('puzzle-victory-msg').classList.add('hidden');
-    
-    // Generate board state (shuffled)
-    do {
-        currentState = [...correctState].sort(() => Math.random() - 0.5);
-    } while (!isSolvable(currentState) || isSolved(currentState)); // ensure it can be won
-    
+    do { currentState = [...correctState].sort(() => Math.random() - 0.5); } while (isSolved(currentState));
     renderPuzzleBoard();
 }
-
 function renderPuzzleBoard() {
-    const grid = document.getElementById('puzzle-grid-container');
-    grid.innerHTML = "";
-    
-    currentState.forEach((value, index) => {
-        const cell = document.createElement('div');
-        cell.className = 'puzzle-cell' + (value === "" ? " empty" : "");
-        cell.innerText = value;
-        cell.onclick = () => movePuzzleCell(index);
-        grid.appendChild(cell);
+    const grid = document.getElementById('puzzle-grid-container'); grid.innerHTML = "";
+    currentState.forEach((v, i) => {
+        const cell = document.createElement('div'); cell.className = 'puzzle-cell' + (v === "" ? " empty" : ""); cell.innerText = v;
+        cell.onclick = () => movePuzzleCell(i); grid.appendChild(cell);
     });
 }
-
 function movePuzzleCell(index) {
-    const emptyIndex = currentState.indexOf("");
-    const allowedMoves = {
-        0: [1, 3], 1: [0, 2, 4], 2: [1, 5],
-        3: [0, 4, 6], 4: [1, 3, 5, 7], 5: [2, 4, 8],
-        6: [3, 7], 7: [4, 6, 8], 8: [5, 7]
-    };
+    const emptyIndex = currentState.indexOf(""), allowed = {0:[1,3],1:[0,2,4],2:[1,5],3:[0,4,6],4:[1,3,5,7],5:[2,4,8],6:[3,7],7:[4,6,8],8:[5,7]};
+    if (allowed[index].includes(emptyIndex)) {
+        currentState[emptyIndex] = currentState[index]; currentState[index] = ""; renderPuzzleBoard();
+        if (isSolved(currentState)) { document.getElementById('puzzle-victory-msg').classList.remove('hidden'); puzzleStage++; setTimeout(initPuzzleGame, 1500); }
+    }
+}
+function isSolved(arr) { return arr.every((val, i) => val === correctState[i]); }
+
+
+// --- NEW ARCADE SECTION: GAME 1 - RETRO SNAKE ---
+let snakeCanvas, snakeCtx, snake, snakeFood, snakeScore, snakeDir, snakeGameInterval;
+function initSnakeGame() {
+    snakeCanvas = document.getElementById('snakeCanvas'); if(!snakeCanvas) return;
+    snakeCtx = snakeCanvas.getContext('2d');
+    snake = [{x: 10, y: 10}]; snakeFood = {x: 5, y: 5}; snakeScore = 0; snakeDir = "RIGHT";
+    document.getElementById('snake-score').innerText = snakeScore;
+    clearInterval(snakeGameInterval);
+    snakeGameInterval = setInterval(updateSnakeEngine, 130);
+}
+function changeSnakeDirection(d) {
+    if (d === "LEFT" && snakeDir !== "RIGHT") snakeDir = "LEFT";
+    if (d === "RIGHT" && snakeDir !== "LEFT") snakeDir = "RIGHT";
+    if (d === "UP" && snakeDir !== "DOWN") snakeDir = "UP";
+    if (d === "DOWN" && snakeDir !== "UP") snakeDir = "DOWN";
+}
+function updateSnakeEngine() {
+    let head = Object.assign({}, snake[0]);
+    if (snakeDir === "LEFT") head.x--; if (snakeDir === "RIGHT") head.x++;
+    if (snakeDir === "UP") head.y--; if (snakeDir === "DOWN") head.y++;
     
-    // If the clicked cell is adjacent to the empty spot, slide it!
-    if (allowedMoves[index].includes(emptyIndex)) {
-        currentState[emptyIndex] = currentState[index];
-        currentState[index] = "";
-        puzzleMoves++;
-        document.getElementById('puzzle-moves').innerText = puzzleMoves;
-        renderPuzzleBoard();
-        
-        if (isSolved(currentState)) {
-            document.getElementById('puzzle-victory-msg').classList.remove('hidden');
-            puzzleStage++;
-            setTimeout(initPuzzleGame, 2000); // Auto advances to next round
-        }
+    // Wall and self collision checks
+    if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || snake.some(s => s.x === head.x && s.y === head.y)) {
+        clearInterval(snakeGameInterval); alert(`Game Over! Final Score: ${snakeScore}`); initSnakeGame(); return;
     }
+    
+    snake.unshift(head);
+    if (head.x === snakeFood.x && head.y === snakeFood.y) {
+        snakeScore += 10; document.getElementById('snake-score').innerText = snakeScore;
+        snakeFood = { x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20) };
+    } else { snake.pop(); }
+    
+    // Draw arena board layout
+    snakeCtx.clearRect(0, 0, 280, 280);
+    snakeCtx.fillStyle = "#22c55e"; snake.forEach(s => snakeCtx.fillRect(s.x*14, s.y*14, 12, 12));
+    snakeCtx.fillStyle = "#ef4444"; snakeCtx.fillRect(snakeFood.x*14, snakeFood.y*14, 12, 12);
 }
+function stopSnakeGame() { clearInterval(snakeGameInterval); }
 
-function isSolved(arr) {
-    return arr.every((val, i) => val === correctState[i]);
+
+// --- NEW ARCADE SECTION: GAME 2 - MEMORY EMOJI CARD MATCH ---
+const emojis = ['🔥', '🔥', '💎', '💎', '🚀', '🚀', '👑', '👑', '👾', '👾', '🌈', '🌈', '🍕', '🍕', '🐱', '🐱'];
+let memorySelectedCards = [], memoryMatches = 0;
+function initMemoryGame() {
+    const grid = document.getElementById('memory-grid'); grid.innerHTML = "";
+    memorySelectedCards = []; memoryMatches = 0;
+    let shuffled = emojis.sort(() => Math.random() - 0.5);
+    shuffled.forEach((emoji, index) => {
+        const card = document.createElement('div'); card.className = 'memory-card-item'; card.dataset.emoji = emoji; card.dataset.id = index;
+        card.onclick = () => flipMemoryCard(card); grid.appendChild(card);
+    });
 }
-
-// Math solver validator for sliding grids
-function isSolvable(arr) {
-    let inversions = 0;
-    let filtered = arr.filter(e => e !== "");
-    for (let i = 0; i < filtered.length; i++) {
-        for (let j = i + 1; j < filtered.length; j++) {
-            if (filtered[i] > filtered[j]) inversions++;
-        }
+function flipMemoryCard(card) {
+    if (card.classList.contains('flipped') || card.classList.contains('matched') || memorySelectedCards.length >= 2) return;
+    card.classList.add('flipped'); memorySelectedCards.push(card);
+    if (memorySelectedCards.length === 2) {
+        if (memorySelectedCards[0].dataset.emoji === memorySelectedCards[1].dataset.emoji) {
+            memorySelectedCards.forEach(c => c.classList.add('matched')); memoryMatches++; memorySelectedCards = [];
+            if (memoryMatches === 8) alert("🏆 Ultimate Win! You matched all memory cards!");
+        } else { setTimeout(() => { memorySelectedCards.forEach(c => c.classList.remove('flipped')); memorySelectedCards = []; }, 800); }
     }
-    return inversions % 2 === 0;
 }
