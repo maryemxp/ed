@@ -16,7 +16,7 @@ function switchArcadeOption(optionId) {
     document.getElementById(optionId).classList.remove('hidden');
 }
 
-// --- HEALTH ZONE & SLEEP CYCLE CALCULATOR ---
+// --- BIOMETRIC SYSTEM & SLEEP CYCLE CALCULATOR ---
 function calculateBodyBattery() {
     let sleep = parseInt(document.getElementById('sleep-hours').value) || 8;
     let work = parseInt(document.getElementById('work-hours').value) || 0;
@@ -31,15 +31,38 @@ function runAIHealthAdvisor() {
 function calculateSleepCycles() {
     const out = document.getElementById('sleep-results'); out.classList.remove('hidden');
     let now = new Date(), suggestions = [];
-    // Calculate perfect sleep cycles (90 mins each + 14 mins to fall asleep)
     for (let i = 4; i <= 6; i++) {
         let cycleTime = new Date(now.getTime() + (i * 90 * 60000) + (14 * 60000));
         suggestions.push(cycleTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
     }
-    out.innerHTML = `⏰ <b>إذا نمت الآن، يجب أن تستيقظ في أحد هذه الأوقات لتقوم بكامل نشاطك:</b><br>
-    • خيار 1 (4 دورات): <b>${suggestions[0]}</b><br>
-    • خيار 2 (5 دورات ممتازة): <b>${suggestions[1]}</b><br>
-    • خيار 3 (6 دورات نوم عميق): <b>${suggestions[2]}</b>`;
+    out.innerHTML = `⏰ <b>If you fall asleep right now, you should wake up at:</b><br>
+    • Option 1 (4 Cycles): <b>${suggestions[0]}</b><br>
+    • Option 2 (5 Cycles - Recommended): <b>${suggestions[1]}</b><br>
+    • Option 3 (6 Cycles - Perfect Rest): <b>${suggestions[2]}</b>`;
+}
+
+// ========================================================
+// --- NEW STUDY FUNCTION: FLASHCARD SPACE REPETITION ---
+// ========================================================
+const flashcardsDeck = [
+    { front: "Feynman Technique", back: "Learning a concept by explaining it in simple terms to a child." },
+    { front: "Pareto Principle (80/20 Rule)", back: "80% of results come from 20% of your focused efforts." },
+    { front: "Active Recall", back: "Testing your mind instantly rather than passively rereading notes." },
+    { front: "Pomodoro Technique", back: "Studying intensely for 25 minutes followed by a short 5-minute break." },
+    { front: "Spaced Repetition", back: "Reviewing information at increasing intervals to combat forgetting." }
+];
+let currentCardIdx = 0;
+function nextFlashcard() {
+    const inner = document.getElementById('flashcard-inner');
+    inner.classList.remove('flipped'); // Reset flip status
+    setTimeout(() => {
+        currentCardIdx = Math.floor(Math.random() * flashcardsDeck.length);
+        document.getElementById('card-front').innerText = flashcardsDeck[currentCardIdx].front;
+        document.getElementById('card-back').innerText = flashcardsDeck[currentCardIdx].back;
+    }, 150);
+}
+function flipFlashcard() {
+    document.getElementById('flashcard-inner').classList.toggle('flipped');
 }
 
 // --- SMART STUDY ZONE: MATH CHALLENGE 1000 ---
@@ -61,13 +84,6 @@ function checkMathAnswer() {
         if(mathScore >= 1000) { feed.innerText = "🏆 Incredible! You hit the 1000 Points milestone!"; mathScore = 0; }
         setTimeout(generateMathQuestion, 1200);
     } else { feed.innerText = "❌ Incorrect! Try again."; feed.style.color = "red"; }
-}
-function explainLessonAI() {
-    const topic = document.getElementById('lesson-topic').value.trim();
-    const out = document.getElementById('lesson-ai-response');
-    if (!topic) { out.classList.remove('hidden'); out.innerHTML = "❌ Type a lesson name first!"; return; }
-    out.classList.remove('hidden');
-    out.innerHTML = `🤖 <b>Deconstruction Engine:</b> Concept [${topic}] structural framework mapped successfully.`;
 }
 let pomodoroInterval, timerMinutes = 25, timerSeconds = 0, isTimerRunning = false;
 function togglePomodoro() {
@@ -100,9 +116,7 @@ function checkScrambleAnswer() {
     } else { feed.innerText = "❌ Try again."; feed.style.color = "#ef4444"; }
 }
 
-// ========================================================
 // --- CREATIVITY HUB: SLIDING NUMBER PUZZLE ---
-// ========================================================
 let puzzleBoard = [1, 2, 3, 4, 5, 6, 7, 8, ""], puzzleLevel = 1;
 function initSliderPuzzle() {
     document.getElementById('puzzle-level').innerText = puzzleLevel;
@@ -162,19 +176,17 @@ function getPos(e) { const r = canvas.getBoundingClientRect(); return { x: e.cli
 function draw(pos) { if (!isDrawing) return; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
 function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
-// ========================================================
-// --- NEW SECTION: SECRET WORLD MAP DATABASE ---
-// ========================================================
+// --- SECRET WORLD MAP DATABASE ---
 const countrySecrets = {
-    saudi: { title: "🇸🇦 المملكة العربية السعودية", text: "تحت رمال صحراء الربع الخالي الشاسعة، تكشف الأقمار الصناعية عن شبكات أنهار قديمة وجافة وبقايا حضارات غارقة مجهولة التاريخ كانت تعيش في اخضرار كامل قبل آلاف السنين." },
-    egypt: { title: "🇪🇬 جمهورية مصر العربية", text: "تحت أبو الهول يوجد سر غامض يعرف بـ 'قاعة السجلات' (Hall of Records)، وهي مكتبة أنفاق سرية يُعتقد أنها تحتوي على علوم قارة أتلانتس المفقودة ولم تُفتح بالكامل حتى اليوم." },
-    morocco: { title: "🇲🇦 المملكة المغربية", text: "مغارة 'الحمام' بمدينة تافوغالت شرق المغرب تحتوي على أقدم دليل في تاريخ البشرية لعملية جراحية ناجحة لثقب الجمجمة تعود لأكثر من 15,000 سنة!" },
-    iraq: { title: "🇮🇶 جمهورية العراق", text: "في بغداد تم اكتشاف 'بطارية بغداد' الأثرية، وهي جرة فخارية تحتوي على أسطوانة نحاس وقضيب حديدي تفيد بأن السومريين أو البابليين عرفوا الكهرباء واستخدموا الطلاء الكهربائي قبل ألفي عام من جالفاني!" },
-    uae: { title: "🇦🇪 الإمارات العربية المتحدة", text: "في موقع 'صاروج الحديد' الأثري في دبي، تم اكتشاف آلاف القطع الذهبية والحديدية الغامضة التي تعود للعصر الحديدي، والتي تكشف عن صلات تجارية سرية غير متوقعة مع حضارات ما وراء البحار." },
-    jordan: { title: "🇯🇴 المملكة الأردنية الهاشمية", text: "مدينة البتراء الوردية المنحوتة في الصخر تحتوي على نظام هندسي خارق لإدارة وتخزين وتوجيه السيول والماء في قلب الصحراء، بدقة توازي الهندسة الهيدروليكية الحديثة." },
-    tunisia: { title: "🇹🇳 الجمهورية التونسية", text: "مدينة قرطاج التاريخية كانت تمتلك ميناءً حربياً دائرياً سرياً وخفياً يسمى 'المونيبول'، مصمم بشكل يمنع أي سفينة معادية بالخارج من رؤية عدد أو تجهيزات السفن بالداخل." },
-    japan: { title: "🇯🇵 اليابان", text: "تحت مياه جزيرة 'يوناغوني'، يوجد نصب صخري ضخم يشبه الهرم المدرج بجدران زواياها حادة 90 درجة، يختلف العلماء حول ما إذا كان من صنع الطبيعة أم بقايا قارة 'مو' الغارقة." },
-    france: { title: "🇫🇷 فرنسا", text: "تحت شوارع باريس النابضة بالحياة، توجد شبكة أنفاق مظلمة ومرعبة بطول مئات الكيلومترات تضم عظام ورفات أكثر من 6 ملايين إنسان، وتُعرف بمقابر باريس السرية (The Catacombs)." }
+    saudi: { title: "🇸🇦 Saudi Arabia", text: "Beneath the massive sands of the Rub' al Khali desert, satellites have detected lost river networks and ancient ruins of unknown civilizations that lived here thousands of years ago." },
+    egypt: { title: "🇪🇬 Egypt", text: "Beneath the Sphinx lies a legendary secret known as the 'Hall of Records', a hidden chamber rumored to hold the ultimate lost knowledge of antiquity." },
+    morocco: { title: "🇲🇦 Morocco", text: "The 'Pigeon Cave' in Taforalt houses the oldest discovered evidence of a successful cranial surgical operation in human history, dating back over 15,000 years!" },
+    iraq: { title: "🇮🇶 Iraq", text: "The 'Baghdad Battery' discovered here suggests that ancient empires might have experimented with basic galvanization and electricity thousands of years ago." },
+    uae: { title: "🇦🇪 UAE", text: "The Saruq Al Hadid archaeological site uncovered thousands of mysterious iron and gold artifacts, revealing secret trade routes connecting to distant ancient worlds." },
+    jordan: { title: "🇯🇴 Jordan", text: "The rose-red city of Petra houses a hyper-advanced hydraulic engineering network capable of capturing, storing, and controlling flash floods in the middle of dry deserts." },
+    tunisia: { title: "🇹🇳 Tunisia", text: "The ancient city of Carthage featured a secret circular military harbor called the 'Cothon', designed to completely hide internal navy preparations from outsider ships." },
+    japan: { title: "🇯🇵 Japan", text: "Submerged off Yonaguni island lies a giant megalithic step pyramid structure with sharp 90-degree angles, creating fierce debates over whether it is artificial or natural." },
+    france: { title: "🇫🇷 France", text: "Deep beneath the busy streets of Paris lies a dark, 300-kilometer labyrinth of underground tunnels holding the skeletal remains of over 6 million people, known as the Catacombs." }
 };
 function revealCountrySecret(code) {
     const box = document.getElementById('map-secret-box');
@@ -185,15 +197,12 @@ function revealCountrySecret(code) {
     }
 }
 
-// ========================================================
-// --- LIGHT GAMES ZONE: RETRO MEMORY MATCH (GEL EL TAYEBIN) ---
-// ========================================================
+// --- LIGHT GAMES ZONE: RETRO MEMORY MATCH ---
 const emojis = ['🔥', '🔥', '💎', '💎', '🚀', '🚀', '👑', '👑', '🎮', '🎮', '🔮', '🔮', '🧩', '🧩', '👻', '👻'];
 let flippedCards = [], matchedPairs = 0;
 function initMemoryGame() {
     const grid = document.getElementById('memory-grid'); grid.innerHTML = "";
     flippedCards = []; matchedPairs = 0;
-    // Shuffle cards
     let shuffled = [...emojis].sort(() => Math.random() - 0.5);
     shuffled.forEach((emoji, idx) => {
         const card = document.createElement('div');
@@ -205,18 +214,14 @@ function initMemoryGame() {
 function flipMemoryCard(card) {
     if (card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length >= 2) return;
     card.classList.add('flipped'); card.innerText = card.dataset.emoji; flippedCards.push(card);
-    if (flippedCards.length === 2) {
-        setTimeout(checkMemoryMatch, 800);
-    }
+    if (flippedCards.length === 2) { setTimeout(checkMemoryMatch, 800); }
 }
 function checkMemoryMatch() {
     const [c1, c2] = flippedCards;
     if (c1.dataset.emoji === c2.dataset.emoji) {
         c1.classList.add('matched'); c2.classList.add('matched'); matchedPairs++;
-        if (matchedPairs === emojis.length / 2) alert("🏆 الألعاب الخفيفة: كفو! أنهيت لعبة الذاكرة بنجاح!");
-    } else {
-        c1.classList.remove('flipped'); c2.classList.remove('flipped'); c1.innerText = "❓"; c2.innerText = "❓";
-    }
+        if (matchedPairs === emojis.length / 2) alert("🏆 Arcade: Outstanding! You matched all pairs!");
+    } else { c1.classList.remove('flipped'); c2.classList.remove('flipped'); c1.innerText = "❓"; c2.innerText = "❓"; }
     flippedCards = [];
 }
 
@@ -239,4 +244,3 @@ function checkTTTWin() {
     const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
     return wins.some(p => tttBoard[p[0]] !== "" && tttBoard[p[0]] === tttBoard[p[1]] && tttBoard[p[1]] === tttBoard[p[2]]);
 }
-
