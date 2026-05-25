@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Life Assistant AI</title>
+    <title>Ultimate Life Assistant AI - Gold Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="main-dashboard" class="screen">
         <header>
-            <h1>✨ Ultimate Life Assistant ✨</h1>
-            <p>Elevate your Health, Mind, and Creativity daily</p>
+            <h1>✨ Ultimate Assistant Pro ✨</h1>
+            <p>Optimize Health, Boost Intellect, and Unleash Fun</p>
         </header>
         <div class="menu-container">
             <div class="menu-card health-card" onclick="switchScreen('health-screen')">
                 <div class="icon">❤️</div>
-                <h3>Health & Mind</h3>
+                <h3>Health & Bio-Hacking</h3>
             </div>
             <div class="menu-card study-card" onclick="switchScreen('study-screen')">
                 <div class="icon">📚</div>
@@ -24,27 +24,27 @@
             </div>
             <div class="menu-card fun-card" onclick="switchScreen('fun-screen')">
                 <div class="icon">🎮</div>
-                <h3>Entertainment</h3>
+                <h3>Arcade & Gaming</h3>
             </div>
         </div>
     </div>
 
     <div id="health-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
-        <h2>❤️ Health & Mind Hub</h2>
+        <h2>❤️ Bio-Hacking & Mind Hub</h2>
         
         <div class="card ai-form">
             <h3>Mental & Physical AI Advisor</h3>
             <div class="input-group">
                 <label>Sleep & Work Hours:</label>
                 <div class="flex-inputs">
-                    <input type="number" id="sleep-hours" placeholder="Sleep hrs">
-                    <input type="number" id="work-hours" placeholder="Work hrs">
+                    <input type="number" id="sleep-hours" placeholder="Sleep hrs" oninput="calculateBodyBattery()">
+                    <input type="number" id="work-hours" placeholder="Work hrs" oninput="calculateBodyBattery()">
                 </div>
             </div>
             <div class="input-group">
                 <label>Current Mood / Anxiety Level:</label>
-                <select id="anxious-status">
+                <select id="anxious-status" onchange="calculateBodyBattery()">
                     <option value="happy">😊 Happy & Energized</option>
                     <option value="tired">🥱 Tired & Burned Out</option>
                     <option value="anxious">😰 Anxious / Overthinking</option>
@@ -57,6 +57,26 @@
             </div>
             <button class="btn health-btn" onclick="runAIHealthAdvisor()">Analyze My Well-being</button>
             <div id="ai-response" class="ai-box hidden"></div>
+        </div>
+
+        <div class="card battery-box">
+            <h3>⚡ AI Body Battery Real-time Status</h3>
+            <p style="font-size: 12px; color: #64748b; margin-top: -5px;">Live power calculations based on your daily data.</p>
+            <div class="battery-container">
+                <div id="battery-bar" style="width: 100%;"></div>
+                <span id="battery-text">100% Charged</span>
+            </div>
+            <div id="battery-advice" style="font-size: 13px; font-weight: bold; margin-top: 10px; color: #475569;"></div>
+        </div>
+
+        <div class="card sound-box">
+            <h3>🎧 Neural Frequency Generator</h3>
+            <p style="font-size: 13px;">Tune your brain waves using simulated bio-acoustic engineering frequencies.</p>
+            <div class="sound-controls">
+                <button class="sound-btn" id="sound-focus" onclick="toggleSoundFrequency('focus')">🧘 Focus Waves (Alpha)</button>
+                <button class="sound-btn" id="sound-sleep" onclick="toggleSoundFrequency('sleep')">🌙 Deep Sleep (Delta)</button>
+            </div>
+            <div id="sound-status-text" style="font-size: 12px; font-weight: bold; color: #4b5563; margin-top: 10px; text-align: center;">Status: Audio Machine Off</div>
         </div>
 
         <div class="card detox-box">
@@ -131,8 +151,7 @@
         <div id="map-box" class="card study-option hidden">
             <h3>🌍 Global History Explorer</h3>
             <p>Select a country to review its historical breakdown:</p>
-            <div class="map-container" id="dynamic-map-container">
-                </div>
+            <div class="map-container" id="dynamic-map-container"></div>
             <div id="history-info" class="history-box hidden"></div>
         </div>
     </div>
@@ -142,8 +161,9 @@
         <h2>🎮 Entertainment Center</h2>
         
         <div class="fun-menu">
-            <button class="btn sub-btn" onclick="switchFunOption('draw-box'); initCanvas();">🎨 Drawing Board</button>
+            <button class="btn sub-btn" onclick="switchFunOption('draw-box'); initCanvas();">🎨 Canvas</button>
             <button class="btn sub-btn" onclick="switchFunOption('word-box'); startWordGame();">🔤 Word Master</button>
+            <button class="btn sub-btn" onclick="switchFunOption('puzzle-box'); initPuzzleGame();">🧩 Sliding Puzzle</button>
         </div>
 
         <div id="draw-box" class="card fun-option hidden">
@@ -154,7 +174,6 @@
 
         <div id="word-box" class="card fun-option hidden">
             <h3>🔤 Word Unscramble Challenge</h3>
-            <p style="font-size: 13px; color: #666;">Rearrange the scrambled letters into a real word!</p>
             <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold;">
                 <span>Score: <span id="word-score">0</span></span>
                 <span>Level: <span id="word-level-display">1</span></span>
@@ -163,6 +182,18 @@
             <input type="text" id="word-input" placeholder="Type answer here" style="text-transform: uppercase; text-align: center; letter-spacing: 2px;">
             <button class="btn" onclick="checkWordGame()" style="margin-top: 15px;">Verify Word 🎯</button>
             <div id="word-feedback" style="margin-top: 12px; font-weight: bold; text-align: center;"></div>
+        </div>
+
+        <div id="puzzle-box" class="card fun-option hidden">
+            <h3>🧩 Smart Grid Sliding Puzzle</h3>
+            <p style="font-size: 12px; color: #64748b; margin-top: -5px;">Click adjacent blocks to slide them. Arrange them from 1 to 8!</p>
+            <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px;">
+                <span>Stage: <span id="puzzle-stage">1</span></span>
+                <span>Moves: <span id="puzzle-moves">0</span></span>
+            </div>
+            <div id="puzzle-grid-container" class="puzzle-grid"></div>
+            <button class="btn sub-btn" onclick="initPuzzleGame()" style="margin-top: 12px;">Shuffle & Restart</button>
+            <div id="puzzle-victory-msg" class="congrats-text hidden" style="margin-top: 10px;">🌟 Perfect! Stage Cleared! Moving Up... 🌟</div>
         </div>
     </div>
 
