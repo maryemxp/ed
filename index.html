@@ -2,50 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>EduWell AI Winner</title>
+  <title>EduWell AI - Ultimate App</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>EduWell AI 🧠💙</h1>
+<div class="app">
 
-<div class="stats">
-  XP: <span id="xp">0</span> | Level: <span id="level">1</span>
-</div>
+  <header>
+    <h1>EduWell AI 🔥</h1>
+    <p>Health • Learning • AI • Motivation</p>
 
-<!-- 🧠 Burnout -->
-<div class="card">
-  <h2>Sleep Motivation 😴</h2>
-  <button onclick="sleepMotivation()">Check Sleep</button>
-  <p id="sleepMsg"></p>
-</div>
+    <div class="stats">
+      XP: <span id="xp">0</span> |
+      Level: <span id="level">1</span>
+    </div>
+  </header>
 
-<!-- 📚 AI Summary -->
-<div class="card">
-  <h2>AI Lesson Summary 📚</h2>
-  <input id="lessonInput" placeholder="Write any lesson in any language">
-  <button onclick="generateSummary()">Generate AI Explanation</button>
-  <p id="summaryResult"></p>
-</div>
+  <!-- 😴 Sleep -->
+  <section class="card sleep">
+    <h2>😴 Sleep Motivation</h2>
+    <button onclick="sleepMotivation()">Check Sleep Energy</button>
+    <p id="sleepMsg"></p>
+  </section>
 
-<!-- 🥗 Food -->
-<div class="card">
-  <h2>Food Check 🥗</h2>
-  <input id="foodInput" placeholder="Enter meal">
-  <button onclick="checkFood()">Check</button>
-  <p id="foodResult"></p>
-</div>
+  <!-- 📚 AI -->
+  <section class="card ai">
+    <h2>📚 AI Lesson Explainer</h2>
+    <input id="lessonInput" placeholder="Write any lesson in any language">
+    <button onclick="generateSummary()">Generate AI Summary</button>
+    <p id="summaryResult"></p>
+  </section>
 
-<!-- 🏆 Challenges -->
-<div class="card">
-  <h2>Daily Challenges 🏆</h2>
+  <!-- 🥗 Food -->
+  <section class="card food">
+    <h2>🥗 Food Checker</h2>
+    <input id="foodInput" placeholder="Enter food">
+    <button onclick="checkFood()">Analyze Food</button>
+    <p id="foodResult"></p>
+  </section>
 
-  <label><input type="checkbox" onchange="challengeDone(this)"> Drink Water</label><br>
-  <label><input type="checkbox" onchange="challengeDone(this)"> Sleep Early</label><br>
-  <label><input type="checkbox" onchange="challengeDone(this)"> Exercise</label>
+  <!-- 🏆 Challenges -->
+  <section class="card challenge">
+    <h2>🏆 Daily Challenges</h2>
 
-  <p id="congrats"></p>
+    <label><input type="checkbox" onchange="challengeDone(this)"> Drink Water</label><br>
+    <label><input type="checkbox" onchange="challengeDone(this)"> Sleep Early</label><br>
+    <label><input type="checkbox" onchange="challengeDone(this)"> Exercise</label><br>
+
+    <p id="congrats"></p>
+  </section>
+
 </div>
 
 <script src="script.js"></script>
