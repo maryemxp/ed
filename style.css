@@ -39,20 +39,24 @@ input, textarea, select { width: 100%; padding: 10px; border: 2px solid #e2e8f0;
 #battery-bar { height: 100%; width: 100%; background: #22c55e; transition: width 0.4s; }
 #battery-text { position: absolute; width: 100%; text-align: center; top: 2px; font-size: 12px; font-weight: 800; }
 
-.study-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 12px; }
-.sub-btn { background-color: #e2e8f0; color: #334155; font-size: 11px; padding: 8px; }
+.study-menu { display: grid; grid-template-columns: repeat(3, 12px); gap: 6px; margin-top: 12px; display: flex; }
+.sub-btn { background-color: #e2e8f0; color: #334155; font-size: 11px; padding: 8px; flex: 1; }
 
 .timer-display { font-size: 40px; font-weight: bold; text-align: center; margin: 10px 0; }
-.timer-status { font-weight: 500; color: #059669; text-align: center; }
-
-/* Map & Country Buttons Panel */
-.map-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 180px; overflow-y: auto; margin-top: 10px; }
-.country-btn { padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; font-size: 12px; text-align: left; }
-.history-box { background: #fffbeb; padding: 12px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #f59e0b; font-size: 13px; line-height: 1.5; }
-
 canvas { border: 2px dashed #cbd5e1; background: #fff; border-radius: 10px; display: block; margin: 0 auto 8px auto; touch-action: none; }
 
-/* TIC TAC TOE GRID FRAMEWORK */
+/* SLIDING NUMBER PUZZLE CONTAINER */
+.puzzle-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 200px; height: 200px; margin: 15px auto; background: #cbd5e1; padding: 6px; border-radius: 12px; }
+.puzzle-cell { background: #ffffff; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; color: #475569; cursor: pointer; user-select: none; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.puzzle-cell.empty { background: #cbd5e1; box-shadow: none; cursor: default; }
+.puzzle-cell:not(.empty):active { background: #f1f5f9; }
+
+/* TIC TAC TOE GRID */
 .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 180px; height: 180px; margin: 15px auto; }
 .ttt-cell { background: #f1f5f9; border: 2px solid #cbd5e1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; cursor: pointer; height: 56px; user-select: none; }
-.ttt-cell:hover { background: #e2e8f0; }
+
+/* SNAKE MOBILE CONTROLS SYSTEM */
+.snake-controls { display: flex; flex-direction: column; align-items: center; margin-top: 15px; gap: 5px; }
+.ctrl-row { display: flex; gap: 30px; }
+.ctrl-btn { width: 50px; height: 45px; background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; display: flex; justify-content: center; align-items: center; }
+.ctrl-btn:active { background: #cbd5e1; }
