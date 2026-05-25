@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- MAIN DASHBOARD -->
     <div id="main-dashboard" class="screen">
         <header>
             <h1>⚡ X-Phoenix Magic System ⚡</h1>
@@ -34,7 +33,6 @@
         </div>
     </div>
 
-    <!-- HEALTH SECTION -->
     <div id="health-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
         <h2>❤️ Bio-Hacking Hub</h2>
@@ -71,11 +69,9 @@
                 <div id="battery-bar" style="width: 100%;"></div>
                 <span id="battery-text">100% Charged</span>
             </div>
-            <div id="battery-advice" style="font-size: 13px; font-weight: bold; margin-top: 10px; color: #475569;"></div>
         </div>
     </div>
 
-    <!-- STUDY SECTION (WITH MATH SOLVER 1000) -->
     <div id="study-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
         <h2>📚 Smart Study Zone</h2>
@@ -98,7 +94,6 @@
             <button class="btn" id="pomodoro-btn" onclick="togglePomodoro()">Start Timer</button>
         </div>
 
-        <!-- Math 1000 Box -->
         <div id="math-box" class="card study-option hidden">
             <h3>🧮 Fast Math Challenge 1000</h3>
             <p style="font-size: 12px; color: #64748b;">Solve equations to rack up your score towards 1000 points!</p>
@@ -110,7 +105,6 @@
         </div>
     </div>
 
-    <!-- CREATIVITY & HUB (WITH SCRAMBLE & PUZZLE) -->
     <div id="fun-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
         <h2>🎨 Creativity & Entertainment</h2>
@@ -126,7 +120,6 @@
             <button class="btn danger-btn" onclick="clearCanvas()">Clear Canvas</button>
         </div>
 
-        <!-- Word Scramble Game -->
         <div id="scramble-box" class="card fun-option hidden">
             <h3>🔤 Word Scramble Challenge</h3>
             <p style="font-size: 12px; color:#64748b;">Rearrange the letters to guess the correct word:</p>
@@ -136,7 +129,6 @@
             <div id="scramble-feedback" style="text-align: center; font-weight: bold; margin-top: 10px;"></div>
         </div>
 
-        <!-- Puzzle/Riddle Game -->
         <div id="puzzle-box" class="card fun-option hidden">
             <h3>🧩 Logical Riddle Puzzle</h3>
             <p id="puzzle-question" style="font-size: 14px; font-weight: 500; min-height: 45px; margin-top: 10px;"></p>
@@ -146,7 +138,6 @@
         </div>
     </div>
 
-    <!-- NEW LIGHT GAMES ZONE (SNAKE & XO) -->
     <div id="arcade-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
         <h2>🎮 Light Games Zone</h2>
@@ -155,7 +146,6 @@
             <button class="btn sub-btn" onclick="switchArcadeOption('ttt-box'); initTicTacToe();">❌ Tic-Tac-Toe</button>
         </div>
 
-        <!-- Game 1: Snake Game Shagala 100% -->
         <div id="snake-box" class="card arcade-option hidden">
             <h3>🐍 Retro Snake Arena</h3>
             <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:5px; font-size:13px;">
@@ -164,7 +154,6 @@
             </div>
             <canvas id="snakeCanvas" width="300" height="300" style="background: #1e293b; border: 3px solid #475569;"></canvas>
             
-            <!-- Custom Mobile Buttons Controller -->
             <div class="snake-controls">
                 <button class="ctrl-btn up" onclick="changeSnakeDirection('UP')">▲</button>
                 <div class="ctrl-row">
@@ -176,7 +165,6 @@
             <button class="btn sub-btn" onclick="initSnakeGame()" style="margin-top: 10px;">Restart Arena</button>
         </div>
 
-        <!-- Game 2: Tic Tac Toe -->
         <div id="ttt-box" class="card arcade-option hidden">
             <h3>❌ Tic-Tac-Toe Challenge ⭕</h3>
             <div id="ttt-status" style="text-align: center; font-weight: bold; margin-bottom: 10px;">Player X's Turn</div>
