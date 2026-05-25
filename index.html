@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Life Assistant AI - Platinum Edition</title>
+    <title>X-Phoenix Magic System</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="main-dashboard" class="screen">
         <header>
-            <h1>✨ Ultimate Assistant Pro ✨</h1>
-            <p>Optimize Health, Boost Intellect, and Unleash Fun</p>
+            <h1>⚡ X-Phoenix Magic System ⚡</h1>
+            <p>The Ultimate Smart Dashboard & Secret Vault</p>
         </header>
         <div class="menu-container">
             <div class="menu-card health-card" onclick="switchScreen('health-screen')">
@@ -24,9 +24,9 @@
             </div>
             <div class="menu-card fun-card" onclick="switchScreen('fun-screen')">
                 <div class="icon">🎨</div>
-                <h3>Creativity & Mind</h3>
+                <h3>Creativity Hub</h3>
             </div>
-            <div class="menu-card arcade-card" onclick="switchScreen('arcade-screen'); initSnakeGame();">
+            <div class="menu-card arcade-card" onclick="switchScreen('arcade-screen'); initTicTacToe();">
                 <div class="icon">🎮</div>
                 <h3>The Arcade Zone</h3>
             </div>
@@ -35,7 +35,7 @@
 
     <div id="health-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
-        <h2>❤️ Bio-Hacking & Mind Hub</h2>
+        <h2>❤️ Bio-Hacking Hub</h2>
         
         <div class="card ai-form">
             <h3>Mental & Physical AI Advisor</h3>
@@ -47,12 +47,12 @@
                 </div>
             </div>
             <div class="input-group">
-                <label>Current Mood / Anxiety Level:</label>
+                <label>Current Mood:</label>
                 <select id="anxious-status" onchange="calculateBodyBattery()">
                     <option value="happy">😊 Happy & Energized</option>
                     <option value="tired">🥱 Tired & Burned Out</option>
-                    <option value="anxious">😰 Anxious / Overthinking</option>
-                    <option value="sad">😢 Low Mood / Sad</option>
+                    <option value="anxious">😰 Overthinking</option>
+                    <option value="sad">😢 Low Mood</option>
                 </select>
             </div>
             <div class="input-group">
@@ -64,7 +64,7 @@
         </div>
 
         <div class="card battery-box">
-            <h3>⚡ AI Body Battery Real-time Status</h3>
+            <h3>⚡ AI Body Battery Status</h3>
             <div class="battery-container">
                 <div id="battery-bar" style="width: 100%;"></div>
                 <span id="battery-text">100% Charged</span>
@@ -74,32 +74,8 @@
 
         <div class="card sleep-hacker-box">
             <h3>🌙 Sleep Cycle Optimizer</h3>
-            <p style="font-size: 12px; color: #64748b;">Wake up fresh by syncing with 90-minute sleep cycles.</p>
             <button class="btn sub-btn" onclick="calculateSleepCycles()">If I sleep now, when should I wake up?</button>
             <div id="sleep-results" class="ai-box hidden" style="background-color: #f5f3ff; border-left-color: #8b5cf6; color: #5b21b6;"></div>
-        </div>
-
-        <div class="card sound-box">
-            <h3>🎧 Neural Frequency Generator</h3>
-            <div class="sound-controls">
-                <button class="sound-btn" id="sound-focus" onclick="toggleSoundFrequency('focus')">🧘 Focus Waves</button>
-                <button class="sound-btn" id="sound-sleep" onclick="toggleSoundFrequency('sleep')">🌙 Sleep Waves</button>
-            </div>
-            <div id="sound-status-text" style="font-size: 12px; font-weight: bold; color: #4b5563; margin-top: 10px; text-align: center;">Status: Audio Off</div>
-        </div>
-
-        <div class="card tasks-box">
-            <h3>Daily Vital Habits</h3>
-            <div class="task-item">
-                <input type="checkbox" id="task1" onchange="checkTasks()"><label for="task1">Hydrate (3L Water) 💧</label>
-            </div>
-            <div class="task-item">
-                <input type="checkbox" id="task2" onchange="checkTasks()"><label for="task2">Achieve 8h Sleep Target 😴</label>
-            </div>
-            <div class="task-item">
-                <input type="checkbox" id="task3" onchange="checkTasks()"><label for="task3">Read 1 Page of a Book 📖</label>
-            </div>
-            <div id="congrats-msg" class="congrats-text hidden">🎉 Congratulations! You completed all tasks! 🎉</div>
         </div>
     </div>
 
@@ -110,30 +86,15 @@
         <div class="study-menu">
             <button class="btn sub-btn" onclick="switchStudyOption('ai-explainer-box')">🤖 AI Explainer</button>
             <button class="btn sub-btn" onclick="switchStudyOption('pomodoro-box')">⏱ Pomodoro</button>
-            <button class="btn sub-btn" onclick="switchStudyOption('math-box'); startMathGame();">🧮 Math</button>
-            <button class="btn sub-btn" onclick="switchStudyOption('map-box')">🌍 World Atlas</button>
-            <button class="btn sub-btn" onclick="switchStudyOption('flashcard-box')">🃏 Flashcards</button>
+            <button class="btn sub-btn" onclick="switchStudyOption('map-box')">🌍 Secret Atlas</button>
         </div>
 
         <div id="ai-explainer-box" class="card study-option hidden">
-            <h3>🤖 AI Concept Explainer</h3>
-            <input type="text" id="lesson-topic" placeholder="e.g., Photosynthesis, Gravity...">
-            <button class="btn" onclick="explainLessonAI()" style="margin-top: 8px;">Explain It!</button>
-            <div id="lesson-ai-response" class="ai-box hidden"></div>
-        </div>
-
-        <div id="flashcard-box" class="card study-option hidden">
-            <h3>🃏 Active Recall Flashcards</h3>
-            <div class="input-group">
-                <input type="text" id="fc-front" placeholder="Question / Front Side">
-                <input type="text" id="fc-back" placeholder="Answer / Back Side" style="margin-top: 5px;">
-            </div>
-            <button class="btn" onclick="addFlashcard()">Add Card</button>
-            <div id="flashcard-display" class="flashcard-view" onclick="flipFlashcard()">👉 Click Add Cards to Begin</div>
-            <div style="display: flex; gap: 10px; margin-top: 8px;">
-                <button class="btn sub-btn" onclick="prevFlashcard()">Previous</button>
-                <button class="btn sub-btn" onclick="nextFlashcard()">Next</button>
-            </div>
+            <h3>🤖 Universal AI Explainer v2</h3>
+            <p style="font-size: 12px; color: #64748b; margin-top: -5px;">Type ANY topic or lesson name. The engine will instantly deconstruct it.</p>
+            <input type="text" id="lesson-topic" placeholder="e.g., Photosynthesis, Geometry, AI, History...">
+            <button class="btn" onclick="explainLessonAI()" style="margin-top: 8px;">Deconstruct Concept 🧠</button>
+            <div id="lesson-ai-response" class="ai-box hidden" style="background-color: #f0fdf4; border-left-color: #22c55e; color: #14532d;"></div>
         </div>
 
         <div id="pomodoro-box" class="card study-option hidden">
@@ -142,16 +103,9 @@
             <button class="btn" id="pomodoro-btn" onclick="togglePomodoro()">Start Timer</button>
         </div>
 
-        <div id="math-box" class="card study-option hidden">
-            <p>Level: <span id="math-level">1</span>/1000</p>
-            <div class="timer-display small-timer" id="math-timer">15s</div>
-            <div class="math-question" id="math-question">2 + 2 = ?</div>
-            <input type="number" id="math-answer">
-            <button class="btn" onclick="submitMathAnswer()">Submit</button>
-            <button class="btn danger-btn" onclick="quitMathGame()">Withdraw</button>
-        </div>
-
         <div id="map-box" class="card study-option hidden">
+            <h3>🌍 Global Secret Atlas</h3>
+            <p style="font-size: 11px; color:#64748b;">Click on any country to reveal historical secrets most people don't know:</p>
             <div class="map-container" id="dynamic-map-container"></div>
             <div id="history-info" class="history-box hidden"></div>
         </div>
@@ -161,59 +115,51 @@
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
         <h2>🎨 Creativity Hub</h2>
         
-        <div class="fun-menu">
-            <button class="btn sub-btn" onclick="switchFunOption('draw-box'); initCanvas();">🎨 Mobile Canvas</button>
-            <button class="btn sub-btn" onclick="switchFunOption('word-box'); startWordGame();">🔤 Word Unscramble</button>
-            <button class="btn sub-btn" onclick="switchFunOption('puzzle-box'); initPuzzleGame();">🧩 Sliding Puzzle</button>
+        <div class="fun-menu" style="grid-template-columns: 1fr;">
+            <button class="btn sub-btn" onclick="initCanvas();">🎨 Open Canvas Panel</button>
         </div>
 
-        <div id="draw-box" class="card fun-option hidden">
-            <h3>Draw Anything (Black Pen)</h3>
-            <canvas id="paintCanvas" width="320" height="280"></canvas>
+        <div class="card">
+            <h3>Mobile Phone Friendly Drawing Board</h3>
+            <canvas id="paintCanvas" width="320" height="300"></canvas>
             <button class="btn danger-btn" onclick="clearCanvas()">Clear Canvas</button>
-        </div>
-
-        <div id="word-box" class="card fun-option hidden">
-            <div class="scrambled-letters" id="scrambled-letters">Loading...</div>
-            <input type="text" id="word-input" style="text-transform: uppercase; text-align: center;">
-            <button class="btn" onclick="checkWordGame()" style="margin-top: 10px;">Verify Word 🎯</button>
-            <div id="word-feedback" style="text-align: center; margin-top: 10px;"></div>
-        </div>
-
-        <div id="puzzle-box" class="card fun-option hidden">
-            <div id="puzzle-grid-container" class="puzzle-grid"></div>
-            <button class="btn sub-btn" onclick="initPuzzleGame()">Shuffle Board</button>
-            <div id="puzzle-victory-msg" class="congrats-text hidden">🎉 Stage Cleared! 🎉</div>
         </div>
     </div>
 
     <div id="arcade-screen" class="screen hidden">
-        <button class="back-btn" onclick="switchScreen('main-dashboard'); stopSnakeGame();">⬅ Back</button>
+        <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
         <h2>🎮 The Arcade Zone</h2>
         <div class="study-menu" style="grid-template-columns: repeat(2, 1fr);">
-            <button class="btn sub-btn" onclick="switchArcadeOption('snake-box'); initSnakeGame();">🐍 Retro Snake</button>
-            <button class="btn sub-btn" onclick="switchArcadeOption('memory-box'); initMemoryGame();">🃏 Brain Cards</button>
+            <button class="btn sub-btn" onclick="switchArcadeOption('ttt-box'); initTicTacToe();">❌ Tic-Tac-Toe</button>
+            <button class="btn sub-btn" onclick="switchArcadeOption('clicker-box'); resetClickerGame();">⚡ Speed Clicker</button>
         </div>
 
-        <div id="snake-box" class="card arcade-option hidden" style="text-align: center;">
-            <h3>🐍 Retro Snake Challenge</h3>
-            <div style="font-weight: bold; margin-bottom: 5px;">Score: <span id="snake-score">0</span></div>
-            <canvas id="snakeCanvas" width="280" height="280" style="background:#1e293b; border: 3px solid #475569;"></canvas>
-            
-            <div class="dpad">
-                <button class="dbtn" onclick="changeSnakeDirection('UP')">🔼</button>
-                <div style="display: flex; gap: 30px;">
-                    <button class="dbtn" onclick="changeSnakeDirection('LEFT')">◀️</button>
-                    <button class="dbtn" onclick="changeSnakeDirection('RIGHT')">▶️</button>
-                </div>
-                <button class="dbtn" onclick="changeSnakeDirection('DOWN')">🔽</button>
+        <div id="ttt-box" class="card arcade-option hidden">
+            <h3>❌ Tic-Tac-Toe Challenge ⭕</h3>
+            <div id="ttt-status" style="text-align: center; font-weight: bold; margin-bottom: 10px;">Player X's Turn</div>
+            <div class="ttt-grid">
+                <div class="ttt-cell" onclick="makeTTTMove(0)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(1)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(2)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(3)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(4)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(5)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(6)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(7)"></div>
+                <div class="ttt-cell" onclick="makeTTTMove(8)"></div>
             </div>
+            <button class="btn sub-btn" onclick="initTicTacToe()" style="margin-top: 10px;">Restart Game</button>
         </div>
 
-        <div id="memory-box" class="card arcade-option hidden">
-            <h3>🃏 Memory Match Arena</h3>
-            <p style="font-size: 11px; text-align: center;">Find pairs of matching emojis before clicking too much!</p>
-            <div id="memory-grid" class="memory-grid"></div>
+        <div id="clicker-box" class="card arcade-option hidden" style="text-align: center;">
+            <h3>⚡ Super Speed Clicker</h3>
+            <p style="font-size: 12px; color: #64748b;">Tap the button as fast as you can before time expires!</p>
+            <div style="display: flex; justify-content: space-around; font-weight: bold; margin: 10px 0;">
+                <span>Clicks: <span id="clicker-score">0</span></span>
+                <span>Time: <span id="clicker-timer">10</span>s</span>
+            </div>
+            <button id="main-click-btn" class="btn" onclick="registerClick()" style="height: 80px; font-size: 20px; background: #3b82f6;">TAP ME!!! 🔥</button>
+            <button class="btn sub-btn" onclick="resetClickerGame()" style="margin-top: 10px;">Reset Arena</button>
         </div>
     </div>
 
