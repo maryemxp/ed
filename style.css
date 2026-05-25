@@ -23,6 +23,7 @@ body {
 .health-card { background-color: #fff1f2; color: #be123c; }
 .study-card { background-color: #f0fdf4; color: #166534; }
 .fun-card { background-color: #faf5ff; color: #6b21a8; }
+.map-card { background-color: #fffbeb; color: #b45309; }
 .arcade-card { background-color: #f0f9ff; color: #0369a1; }
 
 .back-btn { background: none; border: none; color: #64748b; font-size: 14px; font-weight: bold; cursor: pointer; float: left; margin-bottom: 12px; }
@@ -39,24 +40,28 @@ input, textarea, select { width: 100%; padding: 10px; border: 2px solid #e2e8f0;
 #battery-bar { height: 100%; width: 100%; background: #22c55e; transition: width 0.4s; }
 #battery-text { position: absolute; width: 100%; text-align: center; top: 2px; font-size: 12px; font-weight: 800; }
 
-.study-menu { display: grid; grid-template-columns: repeat(3, 12px); gap: 6px; margin-top: 12px; display: flex; }
-.sub-btn { background-color: #e2e8f0; color: #334155; font-size: 11px; padding: 8px; flex: 1; }
+.study-menu { display: flex; gap: 6px; margin-top: 12px; }
+.sub-btn { background-color: #e2e8f0; color: #334155; font-size: 11px; padding: 8px; flex: 1; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
 .timer-display { font-size: 40px; font-weight: bold; text-align: center; margin: 10px 0; }
 canvas { border: 2px dashed #cbd5e1; background: #fff; border-radius: 10px; display: block; margin: 0 auto 8px auto; touch-action: none; }
 
-/* SLIDING NUMBER PUZZLE CONTAINER */
+/* SLIDING NUMBER PUZZLE */
 .puzzle-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 200px; height: 200px; margin: 15px auto; background: #cbd5e1; padding: 6px; border-radius: 12px; }
 .puzzle-cell { background: #ffffff; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; color: #475569; cursor: pointer; user-select: none; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 .puzzle-cell.empty { background: #cbd5e1; box-shadow: none; cursor: default; }
-.puzzle-cell:not(.empty):active { background: #f1f5f9; }
+
+/* SECRET WORLD MAP GRID */
+.map-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
+.map-node { background: #fff; border: 2px solid #fcd34d; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.2s; text-align: center; color: #475569; }
+.map-node:hover { background: #fef3c7; transform: scale(1.02); }
+
+/* RETRO MEMORY MATCH GAME */
+.memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 15px auto; }
+.memory-card-cell { height: 60px; background: #6c5ce7; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; color: white; cursor: pointer; user-select: none; transition: background 0.2s; }
+.memory-card-cell.flipped { background: #fff; border: 2px solid #6c5ce7; color: initial; }
+.memory-card-cell.matched { background: #d1fae5; border: 2px solid #10b981; cursor: default; }
 
 /* TIC TAC TOE GRID */
 .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 180px; height: 180px; margin: 15px auto; }
 .ttt-cell { background: #f1f5f9; border: 2px solid #cbd5e1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; cursor: pointer; height: 56px; user-select: none; }
-
-/* SNAKE MOBILE CONTROLS SYSTEM */
-.snake-controls { display: flex; flex-direction: column; align-items: center; margin-top: 15px; gap: 5px; }
-.ctrl-row { display: flex; gap: 30px; }
-.ctrl-btn { width: 50px; height: 45px; background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; display: flex; justify-content: center; align-items: center; }
-.ctrl-btn:active { background: #cbd5e1; }
