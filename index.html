@@ -26,7 +26,11 @@
                 <div class="icon">🎨</div>
                 <h3>Creativity Hub</h3>
             </div>
-            <div class="menu-card arcade-card" onclick="switchScreen('arcade-screen'); initSnakeGame(); initTicTacToe();">
+            <div class="menu-card map-card" onclick="switchScreen('map-screen')">
+                <div class="icon">🌍</div>
+                <h3>Secret World Map</h3>
+            </div>
+            <div class="menu-card arcade-card" onclick="switchScreen('arcade-screen'); initMemoryGame(); initTicTacToe();">
                 <div class="icon">🎮</div>
                 <h3>Light Games Zone</h3>
             </div>
@@ -69,7 +73,8 @@
 
         <div class="card sleep-hacker-box">
             <h3>🌙 Sleep Cycle Optimizer</h3>
-            <button class="btn sub-btn" onclick="calculateSleepCycles()">If I sleep now, when should I wake up?</button>
+            <p style="font-size: 12px; color: #64748b;">Find the perfect time to wake up if you go to bed right now:</p>
+            <button class="btn sub-btn" onclick="calculateSleepCycles()" style="background-color: #8b5cf6; color: white;">Calculate Wake-Up Time ⏱</button>
             <div id="sleep-results" class="ai-box hidden" style="background-color: #f5f3ff; border-left-color: #8b5cf6; color: #5b21b6;"></div>
         </div>
     </div>
@@ -132,14 +137,34 @@
 
         <div id="puzzle-box" class="card fun-option hidden">
             <h3>🧩 Sliding Number Puzzle</h3>
-            <p style="font-size: 11px; color:#64748b; text-align:center; margin-top:-5px;">Click on blocks adjacent to the empty space to arrange them from 1 to 8!</p>
+            <p style="font-size: 11px; color:#64748b; text-align:center;">Click blocks adjacent to the empty space to arrange them from 1 to 8!</p>
             <div style="text-align: center; font-weight: bold; margin-bottom: 8px; color: #d97706;">Stage Level: <span id="puzzle-level">1</span></div>
-            
-            <div class="puzzle-container" id="puzzle-grid">
-                </div>
-            
-            <button class="btn sub-btn" onclick="initSliderPuzzle()" style="margin-top: 12px;">Reshuffle Stage</button>
+            <div class="puzzle-container" id="puzzle-grid"></div>
+            <button class="btn sub-btn" onclick="initSliderPuzzle()" style="margin-top: 12px;">Reshuffle Board</button>
             <div id="puzzle-feedback" style="text-align: center; font-weight: bold; margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <div id="map-screen" class="screen hidden">
+        <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
+        <h2>🌍 Secret World Map</h2>
+        <p style="font-size: 12px; color:#64748b; text-align:center; margin-top:-5px;">Click on any country to reveal its hidden secret or ancient mystery!</p>
+        
+        <div class="map-grid">
+            <button class="map-node" onclick="revealCountrySecret('saudi')">🇸🇦 Saudi Arabia</button>
+            <button class="map-node" onclick="revealCountrySecret('egypt')">🇪🇬 Egypt</button>
+            <button class="map-node" onclick="revealCountrySecret('morocco')">🇲🇦 Morocco</button>
+            <button class="map-node" onclick="revealCountrySecret('iraq')">🇮🇶 Iraq</button>
+            <button class="map-node" onclick="revealCountrySecret('uae')">🇦🇪 UAE</button>
+            <button class="map-node" onclick="revealCountrySecret('jordan')">🇯🇴 Jordan</button>
+            <button class="map-node" onclick="revealCountrySecret('tunisia')">🇹🇳 Tunisia</button>
+            <button class="map-node" onclick="revealCountrySecret('japan')">🇯🇵 Japan</button>
+            <button class="map-node" onclick="revealCountrySecret('france')">🇫🇷 France</button>
+        </div>
+
+        <div id="map-secret-box" class="card hidden" style="background-color: #fffbeb; border-left: 4px solid #d97706; padding: 15px; margin-top: 15px;">
+            <h4 id="secret-country-title" style="margin: 0 0 5px 0; color: #b45309;">Country</h4>
+            <p id="secret-country-text" style="margin: 0; font-size: 13.5px; color: #78350f; line-height: 1.5;"></p>
         </div>
     </div>
 
@@ -147,27 +172,15 @@
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
         <h2>🎮 Light Games Zone</h2>
         <div class="study-menu" style="grid-template-columns: repeat(2, 1fr);">
-            <button class="btn sub-btn" onclick="switchArcadeOption('snake-box'); initSnakeGame();">🐍 Snake Master</button>
+            <button class="btn sub-btn" onclick="switchArcadeOption('memory-box'); initMemoryGame();">🃏 Retro Memory</button>
             <button class="btn sub-btn" onclick="switchArcadeOption('ttt-box'); initTicTacToe();">❌ Tic-Tac-Toe</button>
         </div>
 
-        <div id="snake-box" class="card arcade-option hidden">
-            <h3>🐍 Retro Snake Arena</h3>
-            <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:5px; font-size:13px;">
-                <span>Score: <span id="snake-score">0</span></span>
-                <span style="color: #10b981;">Control Smoothly ✨</span>
-            </div>
-            <canvas id="snakeCanvas" width="300" height="300" style="background: #1e293b; border: 3px solid #475569;"></canvas>
-            
-            <div class="snake-controls">
-                <button class="ctrl-btn up" onclick="changeSnakeDirection('UP')">▲</button>
-                <div class="ctrl-row">
-                    <button class="ctrl-btn left" onclick="changeSnakeDirection('LEFT')">◀</button>
-                    <button class="ctrl-btn right" onclick="changeSnakeDirection('RIGHT')">▶</button>
-                </div>
-                <button class="ctrl-btn down" onclick="changeSnakeDirection('DOWN')">▼</button>
-            </div>
-            <button class="btn sub-btn" onclick="initSnakeGame()" style="margin-top: 10px;">Restart Arena</button>
+        <div id="memory-box" class="card arcade-option hidden">
+            <h3>🃏 Old School Memory Match</h3>
+            <p style="font-size: 11px; color:#64748b; text-align:center; margin-top:-5px;">Find all matching pairs of emojis before running out of attempts!</p>
+            <div id="memory-grid" class="memory-grid"></div>
+            <button class="btn sub-btn" onclick="initMemoryGame()" style="margin-top: 10px;">Reset Cards</button>
         </div>
 
         <div id="ttt-box" class="card arcade-option hidden">
