@@ -20,8 +20,9 @@ body {
 .menu-container { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
 .menu-card { padding: 20px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: transform 0.2s; font-size: 17px; font-weight: bold; }
 .menu-card:hover { transform: translateY(-2px); }
+.ai-vision-card { background-color: #f0fdfa; color: #0d9488; border: 2px dashed #0d9488; }
 .health-card { background-color: #fff1f2; color: #be123c; }
-.study-card { background-color: #f0fdf4; color: #166534; }
+.study-card { background-color: #f8fafc; color: #1e293b; }
 .fun-card { background-color: #faf5ff; color: #6b21a8; }
 .map-card { background-color: #fffbeb; color: #b45309; }
 .arcade-card { background-color: #f0f9ff; color: #0369a1; }
@@ -33,43 +34,53 @@ h3 { margin-top: 0; font-size: 15px; color: #334155; border-bottom: 2px solid #f
 
 input, textarea, select { width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 5px; }
 .btn { background-color: var(--primary-color); color: white; border: none; padding: 11px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; }
-.danger-btn { background-color: #ff7675; }
 .ai-box { padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; line-height: 1.5; border-left: 4px solid; }
 
+/* DYNAMIC AI CAMERA SYSTEM */
+.camera-wrapper { position: relative; width: 100%; height: 260px; background: #000; border-radius: 12px; overflow: hidden; }
+#webcam { width: 100%; height: 100%; object-fit: cover; }
+.camera-overlay { position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; border: 2px dashed rgba(255,255,255,0.6); border-radius: 8px; pointer-events: none; transition: all 0.3s; }
+.camera-overlay.body-frame { top: 5%; left: 25%; width: 50%; height: 90%; border-color: #38bdf8; }
+
+/* SCI-FI LASER SCANNER EFFECT */
+.laser { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(to right, transparent, #38bdf8, transparent); box-shadow: 0 0 12px #38bdf8; animation: scanning 2s linear infinite; pointer-events: none; }
+@keyframes scanning {
+    0% { top: 0%; }
+    50% { top: 100%; }
+    100% { top: 0%; }
+}
+
+.macro-bar { height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 4px; margin-bottom: 8px; }
+.macro-fill { height: 100%; background: #10b981; }
+
+/* HEALTH & EXTRA STYLING */
 .battery-container { width: 100%; height: 22px; background-color: #e2e8f0; border-radius: 15px; position: relative; overflow: hidden; margin-top: 8px; }
 #battery-bar { height: 100%; width: 100%; background: #22c55e; transition: width 0.4s; }
 #battery-text { position: absolute; width: 100%; text-align: center; top: 2px; font-size: 12px; font-weight: 800; }
-
 .study-menu { display: flex; gap: 6px; margin-top: 12px; }
 .sub-btn { background-color: #e2e8f0; color: #334155; font-size: 11px; padding: 8px; flex: 1; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
 .timer-display { font-size: 40px; font-weight: bold; text-align: center; margin: 10px 0; }
 canvas { border: 2px dashed #cbd5e1; background: #fff; border-radius: 10px; display: block; margin: 0 auto 8px auto; touch-action: none; }
 
-/* INTERACTIVE FLASHCARDS STYLING */
+/* FLASHCARDS */
 .flashcard-container { perspective: 1000px; width: 100%; height: 130px; margin: 15px 0; cursor: pointer; }
 .flashcard-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; border-radius: 12px; }
 .flashcard-inner.flipped { transform: rotateY(180deg); }
-.flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; border-radius: 12px; font-weight: bold; text-align: center; font-size: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+.flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; border-radius: 12px; font-weight: bold; text-align: center; font-size: 15px; }
 .flashcard-front { background: #f0fdf4; color: #166534; border: 2px solid #bbf7d0; }
 .flashcard-back { background: #6c5ce7; color: white; transform: rotateY(180deg); font-weight: 500; font-size: 13.5px; }
 
-/* SLIDING NUMBER PUZZLE */
+/* PUZZLE GRID */
 .puzzle-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 200px; height: 200px; margin: 15px auto; background: #cbd5e1; padding: 6px; border-radius: 12px; }
-.puzzle-cell { background: #ffffff; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; color: #475569; cursor: pointer; user-select: none; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-.puzzle-cell.empty { background: #cbd5e1; box-shadow: none; cursor: default; }
+.puzzle-cell { background: #ffffff; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: bold; color: #475569; cursor: pointer; user-select: none; }
+.puzzle-cell.empty { background: #cbd5e1; box-shadow: none; }
 
-/* SECRET WORLD MAP GRID */
+/* MAP & MEMORY STYLES */
 .map-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-.map-node { background: #fff; border: 2px solid #fcd34d; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.2s; text-align: center; color: #475569; }
-.map-node:hover { background: #fef3c7; transform: scale(1.02); }
-
-/* RETRO MEMORY MATCH GAME */
+.map-node { background: #fff; border: 2px solid #fcd34d; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; text-align: center; }
 .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 15px auto; }
-.memory-card-cell { height: 60px; background: #6c5ce7; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; color: white; cursor: pointer; user-select: none; transition: background 0.2s; }
-.memory-card-cell.flipped { background: #fff; border: 2px solid #6c5ce7; color: initial; }
-.memory-card-cell.matched { background: #d1fae5; border: 2px solid #10b981; cursor: default; }
-
-/* TIC TAC TOE GRID */
+.memory-card-cell { height: 60px; background: #6c5ce7; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; color: white; cursor: pointer; }
+.memory-card-cell.flipped { background: #fff; border: 2px solid #6c5ce7; }
+.memory-card-cell.matched { background: #d1fae5; border: 2px solid #10b981; }
 .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 180px; height: 180px; margin: 15px auto; }
-.ttt-cell { background: #f1f5f9; border: 2px solid #cbd5e1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; cursor: pointer; height: 56px; user-select: none; }
+.ttt-cell { background: #f1f5f9; border: 2px solid #cbd5e1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; cursor: pointer; height: 56px; }
