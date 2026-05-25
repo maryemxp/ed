@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life Balance App</title>
+    <title>Super Life Assistant AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="main-dashboard" class="screen">
         <header>
-            <h1>Welcome to Your Life Assistant</h1>
-            <p>Choose a section to start your productive day!</p>
+            <h1>✨ Ultimate Life Assistant ✨</h1>
+            <p>Elevate your Health, Mind, and Creativity daily</p>
         </header>
         <div class="menu-container">
             <div class="menu-card health-card" onclick="switchScreen('health-screen')">
                 <div class="icon">❤️</div>
-                <h3>Health</h3>
+                <h3>Health & Mind</h3>
             </div>
             <div class="menu-card study-card" onclick="switchScreen('study-screen')">
                 <div class="icon">📚</div>
-                <h3>Study</h3>
+                <h3>Smart Study</h3>
             </div>
             <div class="menu-card fun-card" onclick="switchScreen('fun-screen')">
                 <div class="icon">🎮</div>
@@ -31,47 +31,54 @@
 
     <div id="health-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
-        <h2>❤️ Health & Well-being</h2>
+        <h2>❤️ Health & Mind Hub</h2>
         
         <div class="card ai-form">
-            <h3>AI Health Assessment</h3>
+            <h3>Mental & Physical AI Advisor</h3>
             <div class="input-group">
-                <label>How many hours did you sleep?</label>
-                <input type="number" id="sleep-hours" placeholder="e.g. 7">
+                <label>Sleep & Work Hours:</label>
+                <div class="flex-inputs">
+                    <input type="number" id="sleep-hours" placeholder="Sleep hrs">
+                    <input type="number" id="work-hours" placeholder="Work hrs">
+                </div>
             </div>
             <div class="input-group">
-                <label>How many hours did you work today?</label>
-                <input type="number" id="work-hours" placeholder="e.g. 8">
-            </div>
-            <div class="input-group">
-                <label>Do you feel anxious today?</label>
+                <label>Current Mood / Anxiety Level:</label>
                 <select id="anxious-status">
-                    <option value="no">No, I feel great!</option>
-                    <option value="yes">Yes, a little</option>
-                    <option value="very">Yes, very anxious</option>
+                    <option value="happy">😊 Happy & Energized</option>
+                    <option value="tired">🥱 Tired & Burned Out</option>
+                    <option value="anxious">😰 Anxious / Overthinking</option>
+                    <option value="sad">😢 Low Mood / Sad</option>
                 </select>
             </div>
             <div class="input-group">
-                <label>Do you have any specific problem?</label>
-                <textarea id="health-problem" placeholder="Describe how you feel..."></textarea>
+                <label>Describe any problem or symptom:</label>
+                <textarea id="health-problem" placeholder="e.g., I have a headache, or I feel overwhelmed..."></textarea>
             </div>
-            <button class="btn" onclick="runAIHealthAdvisor()">Ask AI Advisor</button>
+            <button class="btn health-btn" onclick="runAIHealthAdvisor()">Analyze My Well-being</button>
             <div id="ai-response" class="ai-box hidden"></div>
         </div>
 
+        <div class="card detox-box">
+            <h3>📵 Digital Detox Challenge</h3>
+            <p>Lock your phone screen mentally and breathe for 1 minute to reduce cortisol.</p>
+            <div class="timer-display small-timer" id="detox-timer">60s</div>
+            <button class="btn sub-btn" id="detox-btn" onclick="startDetox()">Start Detox Breathe</button>
+        </div>
+
         <div class="card tasks-box">
-            <h3>Daily Habits Checklist</h3>
+            <h3>Daily Vital Habits</h3>
             <div class="task-item">
                 <input type="checkbox" id="task1" onchange="checkTasks()">
-                <label for="task1">Drink 3 Liters of Water 💧</label>
+                <label for="task1">Hydrate (Drink 3L Water) 💧</label>
             </div>
             <div class="task-item">
                 <input type="checkbox" id="task2" onchange="checkTasks()">
-                <label for="task2">Sleep for 8 Hours 😴</label>
+                <label for="task2">Achieve 8-Hour Sleep Target 😴</label>
             </div>
             <div class="task-item">
                 <input type="checkbox" id="task3" onchange="checkTasks()">
-                <label for="task3">Read 1 Page of a Book 📖</label>
+                <label for="task3">Feed your mind (Read 1 Page) 📖</label>
             </div>
             <div id="congrats-msg" class="congrats-text hidden">🎉 Congratulations! You completed all tasks! 🎉</div>
         </div>
@@ -79,30 +86,41 @@
 
     <div id="study-screen" class="screen hidden">
         <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
-        <h2>📚 Study Zone</h2>
+        <h2>📚 Smart Study Zone</h2>
         
         <div class="study-menu">
-            <button class="btn sub-btn" onclick="switchStudyOption('pomodoro-box')">⏱ Pomodoro Timer</button>
-            <button class="btn sub-btn" onclick="switchStudyOption('math-box'); startMathGame();">🧮 Math Challenge</button>
-            <button class="btn sub-btn" onclick="switchStudyOption('map-box')">🌍 World History Map</button>
+            <button class="btn sub-btn" onclick="switchStudyOption('ai-explainer-box')">🤖 AI Explainer</button>
+            <button class="btn sub-btn" onclick="switchStudyOption('pomodoro-box')">⏱ Pomodoro</button>
+            <button class="btn sub-btn" onclick="switchStudyOption('math-box'); startMathGame();">🧮 Math</button>
+            <button class="btn sub-btn" onclick="switchStudyOption('map-box')">🌍 World Atlas</button>
+        </div>
+
+        <div id="ai-explainer-box" class="card study-option hidden">
+            <h3>🤖 AI Lesson & Concept Explainer</h3>
+            <p>Type any topic or lesson name, and the AI will explain it simply!</p>
+            <div class="input-group">
+                <input type="text" id="lesson-topic" placeholder="e.g., Photosynthesis, Quantum Physics, WW2...">
+            </div>
+            <button class="btn" onclick="explainLessonAI()">Explain It To Me!</button>
+            <div id="lesson-ai-response" class="ai-box hidden" style="background-color: #e3f2fd; border-left-color: #1e88e5; color: #0d47a1;"></div>
         </div>
 
         <div id="pomodoro-box" class="card study-option hidden">
-            <h3>Pomodoro Timer (25m Study / 5m Break)</h3>
+            <h3>Pomodoro Timer (25m / 5m)</h3>
             <div class="timer-display" id="timer-display">25:00</div>
-            <div class="timer-status" id="timer-status">Study Time!</div>
+            <div class="timer-status" id="timer-status">Ready to Focus?</div>
             <button class="btn" id="pomodoro-btn" onclick="togglePomodoro()">Start Timer</button>
         </div>
 
         <div id="math-box" class="card study-option hidden">
-            <h3>Progressive Math Challenge</h3>
+            <h3>Progressive Math (Levels 1 - 1000)</h3>
             <div id="math-game-play">
-                <p>Level: <span id="math-level">1</span>/1000</p>
+                <p>Level: <span id="math-level">1</span> / 1000</p>
                 <div class="timer-display small-timer" id="math-timer">Time Left: 15s</div>
-                <div class="math-question" id="math-question">5 + 3 = ?</div>
+                <div class="math-question" id="math-question">2 + 2 = ?</div>
                 <input type="number" id="math-answer" placeholder="Your answer">
                 <button class="btn" onclick="submitMathAnswer()">Submit</button>
-                <button class="btn danger-btn" onclick="quitMathGame()">Withdraw (Quit)</button>
+                <button class="btn danger-btn" onclick="quitMathGame()">Withdraw</button>
             </div>
             <div id="math-game-over" class="hidden">
                 <h4 id="math-result-msg">Game Over!</h4>
@@ -111,16 +129,10 @@
         </div>
 
         <div id="map-box" class="card study-option hidden">
-            <h3>World History Explorer</h3>
-            <p>Click on a country to learn a brief summary of its history:</p>
-            <div class="map-container">
-                <button class="country-btn" onclick="showHistory('USA')">🇺🇸 USA</button>
-                <button class="country-btn" onclick="showHistory('Egypt')">🇪🇬 Egypt</button>
-                <button class="country-btn" onclick="showHistory('Saudi Arabia')">🇸🇦 Saudi Arabia</button>
-                <button class="country-btn" onclick="showHistory('UK')">🇬🇧 United Kingdom</button>
-                <button class="country-btn" onclick="showHistory('China')">🇨🇳 China</button>
-                <button class="country-btn" onclick="showHistory('Japan')">🇯🇵 Japan</button>
-            </div>
+            <h3>🌍 Global History Explorer</h3>
+            <p>Select a country to review its historical breakdown:</p>
+            <div class="map-container" id="dynamic-map-container">
+                </div>
             <div id="history-info" class="history-box hidden"></div>
         </div>
     </div>
@@ -130,23 +142,27 @@
         <h2>🎮 Entertainment Center</h2>
         
         <div class="fun-menu">
-            <button class="btn sub-btn" onclick="switchFunOption('draw-box'); initCanvas();">🎨 Free Drawing Canvas</button>
-            <button class="btn sub-btn" onclick="switchFunOption('word-box'); startWordGame();">🔤 Word Builder Game</button>
+            <button class="btn sub-btn" onclick="switchFunOption('draw-box'); initCanvas();">🎨 Drawing Board</button>
+            <button class="btn sub-btn" onclick="switchFunOption('word-box'); startWordGame();">🔤 Word Master</button>
         </div>
 
         <div id="draw-box" class="card fun-option hidden">
-            <h3>Draw Anything You Want (Black Pen)</h3>
+            <h3>Free Canvas (Black Pen)</h3>
             <canvas id="paintCanvas" width="320" height="300"></canvas>
             <button class="btn danger-btn" onclick="clearCanvas()">Clear Canvas</button>
         </div>
 
         <div id="word-box" class="card fun-option hidden">
-            <h3>Form a Correct Word From These Letters</h3>
-            <div class="scrambled-letters" id="scrambled-letters">A - P - P - L - E</div>
-            <input type="text" id="word-input" placeholder="Type the word here" style="text-transform: uppercase;">
-            <button class="btn" onclick="checkWordGame()">Check Answer</button>
-            <div id="word-feedback" style="margin-top: 10px; font-weight: bold;"></div>
-            <button class="btn sub-btn" onclick="startWordGame()" style="margin-top: 10px;">Next Word</button>
+            <h3>🔤 Word Unscramble Challenge</h3>
+            <p style="font-size: 13px; color: #666;">Rearrange the scrambled letters into a real word!</p>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold;">
+                <span>Score: <span id="word-score">0</span></span>
+                <span>Level: <span id="word-level-display">1</span></span>
+            </div>
+            <div class="scrambled-letters" id="scrambled-letters">Loading...</div>
+            <input type="text" id="word-input" placeholder="Type answer here" style="text-transform: uppercase; text-align: center; letter-spacing: 2px;">
+            <button class="btn" onclick="checkWordGame()" style="margin-top: 15px;">Verify Word 🎯</button>
+            <div id="word-feedback" style="margin-top: 12px; font-weight: bold; text-align: center;"></div>
         </div>
     </div>
 
