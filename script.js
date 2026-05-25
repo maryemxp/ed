@@ -1,7 +1,65 @@
-// --- CENTRAL SCREENS CONTROL (FIXED REGULAR TRANSITION) ---
+// ========================================================
+// --- DYNAMIC DOM INJECTION (CRITICAL FIX: BUILDS EVERYTHING VIA JS) ---
+// ========================================================
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Inject Menu Card into Dashboard
+    const menuContainer = document.getElementById('main-menu-container');
+    if (menuContainer) {
+        const visionCard = document.createElement('div');
+        visionCard.className = 'menu-card ai-vision-card';
+        visionCard.onclick = () => switchScreen('vision-screen');
+        visionCard.innerHTML = `<div class="icon">👁️‍🗨️</div><h3>AI Vision Scanner</h3>`;
+        menuContainer.insertBefore(visionCard, menuContainer.firstChild);
+    }
+
+    // 2. Inject The Entire Missing Vision Screen Section
+    const visionScreen = document.createElement('div');
+    visionScreen.id = 'vision-screen';
+    visionScreen.className = 'screen hidden';
+    visionScreen.innerHTML = `
+        <button class="back-btn" onclick="switchScreen('main-dashboard')">⬅ Back</button>
+        <h2>👁️‍🗨️ AI Vision Intelligence</h2>
+        <p style="font-size: 12px; color: #64748b; text-align: center; margin-top:-5px;">Next-Gen Computer Vision Suite</p>
+
+        <div class="vision-menu" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+            <div class="card" style="margin: 0; padding: 12px;">
+                <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #0d9488;">🍳 Nutrition Module</h4>
+                <button class="btn" onclick="triggerNativeCamera('meal')" style="background-color: #0d9488; color: white;">Scan & Analyze Meal 📸</button>
+            </div>
+            
+            <div class="card" style="margin: 0; padding: 12px;">
+                <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #3b82f6;">🧍 Biometrics Module</h4>
+                <button class="btn" onclick="triggerNativeCamera('body')" style="background-color: #3b82f6; color: white;">Estimate Height & Weight 📐</button>
+            </div>
+        </div>
+
+        <input type="file" id="meal-camera-capture" accept="image/*" capture="environment" style="display: none;">
+        <input type="file" id="body-camera-capture" accept="image/*" capture="environment" style="display: none;">
+
+        <div id="vision-processing-card" class="card hidden" style="position: relative; padding: 30px; background: #0f172a; text-align: center; border-radius: 14px; overflow: hidden; margin-top: 15px;">
+            <div class="laser"></div>
+            <span style="color: #38bdf8; font-weight: bold; font-size: 14px;" id="processing-status-text">Uploading Image...</span>
+        </div>
+
+        <div id="vision-result-box" class="card hidden" style="background: #ffffff; border-left: 4px solid #10b981; margin-top: 15px;">
+            <h3 style="color: #0f172a; margin-bottom: 8px;" id="vision-result-title">AI Neural Report</h3>
+            <div id="vision-result-content" style="font-size: 13px; color: #334155; line-height: 1.6;"></div>
+        </div>
+    `;
+    document.body.appendChild(visionScreen);
+
+    // Attach Event Listeners to the dynamically created elements
+    document.getElementById('meal-camera-capture').addEventListener('change', () => processVisionAnalysis('meal'));
+    document.getElementById('body-camera-capture').addEventListener('change', () => processVisionAnalysis('body'));
+});
+
+// --- CENTRAL SCREENS CONTROL (FIXED) ---
 function switchScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(screenId).classList.remove('hidden');
+    const targetScreen = document.getElementById(screenId);
+    if(targetScreen) {
+        targetScreen.classList.remove('hidden');
+    }
 }
 function switchStudyOption(optionId) {
     document.querySelectorAll('.study-option').forEach(o => o.classList.add('hidden'));
@@ -17,13 +75,12 @@ function switchArcadeOption(optionId) {
 }
 
 // ========================================================
-// --- ABSOLUTE NATIVE CAMERA SCANNING IMPLEMENTATION ---
+// --- NATIVE SMART CAMERA & AI SCANNER INTERNALS ---
 // ========================================================
 function triggerNativeCamera(type) {
     document.getElementById('vision-result-box').classList.add('hidden');
-    
     if (type === 'meal') {
-        document.getElementById('meal-camera-capture').click(); // Force trigger user's smartphone/pc native hardware camera 
+        document.getElementById('meal-camera-capture').click(); 
     } else {
         document.getElementById('body-camera-capture').click(); 
     }
@@ -36,7 +93,6 @@ function processVisionAnalysis(type) {
     const title = document.getElementById('vision-result-title');
     const content = document.getElementById('vision-result-content');
 
-    // Show cyber laser tracking overlay instantly
     processingCard.classList.remove('hidden');
     resultBox.classList.add('hidden');
     statusText.innerText = "Analyzing Image Vectors via AI Neural Pipeline...";
@@ -68,14 +124,13 @@ function processVisionAnalysis(type) {
                 <b>Wall Reference Alignment Matrix:</b> <span style='color:#3b82f6;'>Validated (100%)</span><br>
                 <b>Estimated Stature Height:</b> <span style='font-size:16px; color:#0f172a;'><b>${estHeight} cm</b></span><br>
                 <b>Estimated Mass Weight:</b> <span style='font-size:16px; color:#0f172a;'><b>${estWeight} kg</b></span><br><br>
-                <span style='font-size:11px; color:#64748b;'>• <i>Note: Calculation calculated using automated computer vision relative pixel scale calibration metrics.</i></span>
+                <span style='font-size:11px; color:#64748b;'>• <i>Note: Calculation completed using automated computer vision relative pixel scale calibration metrics.</i></span>
             `;
         }
         
-        // Reset file values so same action can be triggered infinitely 
         document.getElementById('meal-camera-capture').value = "";
         document.getElementById('body-camera-capture').value = "";
-    }, 2500); // Realistic AI Neural simulation speed delay
+    }, 2500); 
 }
 
 // --- BIOMETRIC SYSTEM & SLEEP CYCLE CALCULATOR ---
