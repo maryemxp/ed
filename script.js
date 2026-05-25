@@ -1,70 +1,99 @@
-let data = JSON.parse(localStorage.getItem('eduwell')) || {
-  xp: 0,
-  level: 1,
-  points: 0,
-  challenges: [],
-  history: [],
-  badges: []
-};
+let xp = 0;
+let level = 1;
 
-let user = localStorage.getItem('user') || prompt('Enter name');
-localStorage.setItem('user', user);
-
-function save() {
-  localStorage.setItem('eduwell', JSON.stringify(data));
+function update() {
+  document.getElementById("xp").innerText = xp;
+  document.getElementById("level").innerText = level;
 }
 
-function addXP(x) {
-  data.xp += x;
-  data.level = Math.floor(data.xp / 100) + 1;
-  save();
-  updateUI();
+function addXP(v) {
+  xp += v;
+  level = Math.floor(xp / 100) + 1;
+  update();
 }
 
-function analyzeBurnout() {
-  let s = +studyHours.value;
-  let sl = +sleepHours.value;
-  let sc = +screenHours.value;
-  let st = +stressLevel.value;
+/* 😴 Sleep AI */
+function sleepMotivation() {
+  const msg = [
+    "😴 Sleep = Brain Power",
+    "⚡ Rest makes you smarter",
+    "🧠 Your brain is recharging",
+    "💙 Good sleep = success"
+  ][Math.floor(Math.random()*4)];
 
-  let score = 100;
-  if (s > 8) score -= 20;
-  if (sl < 6) score -= 30;
-  if (sc > 6) score -= 20;
-  if (st > 7) score -= 30;
-
-  data.history.push(score);
-  addXP(20);
-
-  burnoutResult.innerText = score > 60 ? "Good" : "Bad";
-}
-
-function analyzeFood() {
-  let m = mealInput.value.toLowerCase();
-  foodResult.innerText = m.includes('burger') ? "Bad" : "Good";
+  document.getElementById("sleepMsg").innerText = msg;
   addXP(10);
 }
 
+/* 📚 SMART AI (any language support) */
 function generateSummary() {
-  let t = lessonInput.value;
-  summaryResult.innerText = "AI: " + t;
-  addXP(15);
+  let text = lessonInput.value;
+
+  if (!text) return;
+
+  let result = "📚 AI Explanation: " + text;
+
+  if (/[\u0600-\u06FF]/.test(text)) {
+    result = "📚 شرح ذكي: " + text;
+  }
+
+  if (/[à-ÿ]/i.test(text)) {
+    result = "📚 Explication: " + text;
+  }
+
+  summaryResult.innerText = result;
+  addXP(20);
 }
 
-function sendHelp() {
-  helpResult.innerText = "Sent";
-  addXP(25);
-}
+/* 🥗 FOOD */
+function checkFood() {
+  let food = foodInput.value.toLowerCase();
 
-function toggleChallenge(el) {
-  el.classList.toggle('active');
+  foodResult.innerText =
+    (food.includes("burger") || food.includes("cola"))
+    ? "🔴 Unhealthy"
+    : "🟢 Healthy";
+
   addXP(10);
 }
 
-function updateUI() {
-  level.innerText = data.level;
-  xp.innerText = data.xp;
-  points.innerText = data.points;
+/* 🏆 CHALLENGE */
+function checkDone() {
+  let boxes = document.querySelectorAll("input[type=checkbox]");
+  let allDone = [...boxes].every(b => b.checked);
+
+  if (allDone) {
+    congrats.innerText = "🎉 CONGRATULATIONS 🎉";
+    addXP(30);
+  } else {
+    congrats.innerText = "";
+  }
 }
 
-window.onload = updateUI;
+/* 📥 DOWNLOAD SYSTEM */
+function downloadText(filename, text) {
+  let blob = new Blob([text], {type: "text/plain"});
+  let a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+/* downloads */
+function downloadSleep() {
+  downloadText("sleep.txt", sleepMsg.innerText);
+}
+
+function downloadSummary() {
+  downloadText("summary.txt", summaryResult.innerText);
+}
+
+function downloadFood() {
+  downloadText("food.txt", foodResult.innerText);
+}
+
+function downloadChallenge() {
+  downloadText("challenge.txt", congrats.innerText);
+}
+
+update();
