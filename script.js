@@ -1,8 +1,8 @@
-// --- CENTRAL CONTROLLERS ---
+// --- CENTRAL SWITCHES ---
 function switchScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
     document.getElementById(screenId).classList.remove('hidden');
-    if(screenId !== 'arcade-screen') clearInterval(snakeInterval); // Stop snake if exited
+    if(screenId !== 'arcade-screen') clearInterval(snakeInterval); 
 }
 function switchStudyOption(optionId) {
     document.querySelectorAll('.study-option').forEach(o => o.classList.add('hidden'));
@@ -18,7 +18,7 @@ function switchArcadeOption(optionId) {
     if(optionId !== 'snake-box') clearInterval(snakeInterval);
 }
 
-// --- BIOMETRIC SIMULATION ---
+// --- BIOMETRIC SYSTEM & SLEEP CALCULATOR ---
 function calculateBodyBattery() {
     let sleep = parseInt(document.getElementById('sleep-hours').value) || 8;
     let work = parseInt(document.getElementById('work-hours').value) || 0;
@@ -28,10 +28,19 @@ function calculateBodyBattery() {
 }
 function runAIHealthAdvisor() {
     const box = document.getElementById('ai-response'); box.classList.remove('hidden');
-    box.innerHTML = "🧠 <b>AI Advisor:</b> Neural feedback stable. Maintain your optimized sleeping matrix.";
+    box.innerHTML = "🧠 <b>AI Advisor:</b> Neural feedback stable. Maintain your optimized sleep schedule.";
+}
+function calculateSleepCycles() {
+    const out = document.getElementById('sleep-results'); out.classList.remove('hidden');
+    let now = new Date(), suggestions = [];
+    for (let i = 4; i <= 5; i++) {
+        let cycle = new Date(now.getTime() + (i * 90 * 60000) + (14 * 60000));
+        suggestions.push(cycle.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+    }
+    out.innerHTML = `⏰ <b>Perfect Wake-Up Targets:</b><br>• If you sleep right now ➜ Wake up at <b>${suggestions[0]}</b> or <b>${suggestions[1]}</b> to avoid morning fatigue!`;
 }
 
-// --- STUDY SECTION: UNIVERSAL AI EXPLAINER ---
+// --- SMART STUDY HUB: UNIVERSAL AI EXPLAINER ---
 function explainLessonAI() {
     const topic = document.getElementById('lesson-topic').value.trim();
     const out = document.getElementById('lesson-ai-response');
@@ -40,7 +49,7 @@ function explainLessonAI() {
     out.innerHTML = `🤖 <b>Deconstruction Engine:</b><br>• <b>Concept [${topic}]:</b> Essential structural framework standard.<br>• <b>The Secret Link:</b> Works exponentially better when visual maps are introduced.<br>• <b>Application:</b> Use it directly to design modular problem architectures.`;
 }
 
-// --- STUDY SECTION: MATH CHALLENGE 1000 ---
+// --- SMART STUDY HUB: MATH CHALLENGE 1000 ---
 let mathScore = 0, currentAnswer = 0;
 function generateMathQuestion() {
     let num1 = Math.floor(Math.random() * 50) + 10;
@@ -102,26 +111,75 @@ function checkScrambleAnswer() {
     } else { feed.innerText = "❌ Not quite right, look closer."; feed.style.color = "#ef4444"; }
 }
 
-// --- ENTERTAINMENT: RIDDLE PUZZLE GAME ---
-const riddleDatabase = [
-    { q: "What has keys but can't open a single door?", a: "piano" },
-    { q: "The more of them you take, the more you leave behind. What are they?", a: "footsteps" },
-    { q: "What has to be broken before you can use it?", a: "egg" }
-];
-let currentRiddleIdx = 0;
-function nextPuzzle() {
-    currentRiddleIdx = Math.floor(Math.random() * riddleDatabase.length);
-    document.getElementById('puzzle-question').innerText = riddleDatabase[currentRiddleIdx].q;
-    document.getElementById('puzzle-input').value = "";
+// ========================================================
+// --- ENTERTAINMENT: 100% SHAGALA SLIDING NUMBER PUZZLE WITH LEVELS ---
+// ========================================================
+let puzzleBoard = [1, 2, 3, 4, 5, 6, 7, 8, ""], puzzleLevel = 1;
+
+function initSliderPuzzle() {
+    document.getElementById('puzzle-level').innerText = puzzleLevel;
     document.getElementById('puzzle-feedback').innerText = "";
+    shufflePuzzle();
+    renderPuzzleGrid();
 }
-function checkPuzzleAnswer() {
-    let userAns = document.getElementById('puzzle-input').value.toLowerCase().trim();
-    let feed = document.getElementById('puzzle-feedback');
-    if(userAns.includes(riddleDatabase[currentRiddleIdx].a)) {
-        feed.innerText = "🔮 Puzzle Solved! Excellent logic."; feed.style.color = "#22c55e";
-        setTimeout(nextPuzzle, 1500);
-    } else { feed.innerText = "❌ Intricate puzzle... think deeper."; feed.style.color = "#ef4444"; }
+
+function shufflePuzzle() {
+    // Shuffling factor changes depending on Level difficulty
+    let shuffleCount = 20 + (puzzleLevel * 15);
+    for (let i = 0; i < shuffleCount; i++) {
+        let emptyIdx = puzzleBoard.indexOf("");
+        let validMoves = getValidPuzzleMoves(emptyIdx);
+        let randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+        // Swap values
+        puzzleBoard[emptyIdx] = puzzleBoard[randomMove];
+        puzzleBoard[randomMove] = "";
+    }
+    // Safety check to ensure it doesn't accidentally shuffle into a solved board
+    if (checkPuzzleWin()) shufflePuzzle();
+}
+
+function getValidPuzzleMoves(idx) {
+    let moves = [];
+    if (idx % 3 > 0) moves.push(idx - 1);  // Left
+    if (idx % 3 < 2) moves.push(idx + 1);  // Right
+    if (idx - 3 >= 0) moves.push(idx - 3); // Up
+    if (idx + 3 < 9) moves.push(idx + 3);  // Down
+    return moves;
+}
+
+function renderPuzzleGrid() {
+    const grid = document.getElementById('puzzle-grid');
+    grid.innerHTML = "";
+    puzzleBoard.forEach((val, idx) => {
+        const cell = document.createElement('div');
+        cell.className = `puzzle-cell ${val === "" ? "empty" : ""}`;
+        cell.innerText = val;
+        cell.onclick = () => makePuzzleMove(idx);
+        grid.appendChild(cell);
+    });
+}
+
+function makePuzzleMove(idx) {
+    let emptyIdx = puzzleBoard.indexOf("");
+    let validMoves = getValidPuzzleMoves(emptyIdx);
+    
+    if (validMoves.includes(idx)) {
+        puzzleBoard[emptyIdx] = puzzleBoard[idx];
+        puzzleBoard[idx] = "";
+        renderPuzzleGrid();
+        
+        if (checkPuzzleWin()) {
+            document.getElementById('puzzle-feedback').innerText = `🎉 Level ${puzzleLevel} Cleared! Moving Up!`;
+            document.getElementById('puzzle-feedback').style.color = "#22c55e";
+            puzzleLevel++;
+            setTimeout(initSliderPuzzle, 1800);
+        }
+    }
+}
+
+function checkPuzzleWin() {
+    const winningCombo = [1, 2, 3, 4, 5, 6, 7, 8, ""];
+    return puzzleBoard.every((val, idx) => val === winningCombo[idx]);
 }
 
 // --- CREATIVITY: DRAWING CANVAS ENGINE ---
@@ -143,22 +201,26 @@ function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
 
 // ========================================================
-// --- LIGHT GAMES ZONE: 100% SHAGALA SNAKE MASTER ---
+// --- LIGHT GAMES ZONE: SMOOTH & BALANCED RETRO SNAKE ---
 // ========================================================
 let snakeCanvas, sCtx, snake, snakeFood, snakeDx, snakeDy, snakeScore, snakeInterval = null;
-const boxSize = 15; // Grid Unit Grid
+let nextDirection = 'RIGHT'; // Prevents rapid double tapping collision bug
+const boxSize = 15; 
 
 function initSnakeGame() {
     snakeCanvas = document.getElementById('snakeCanvas');
+    if(!snakeCanvas) return;
     sCtx = snakeCanvas.getContext('2d');
     clearInterval(snakeInterval);
     
     snake = [{x: 150, y: 150}, {x: 135, y: 150}, {x: 120, y: 150}];
     snakeDx = boxSize; snakeDy = 0; snakeScore = 0;
+    nextDirection = 'RIGHT';
     document.getElementById('snake-score').innerText = snakeScore;
     
     generateSnakeFood();
-    snakeInterval = setInterval(stepSnakeGame, 130); // Perfectly balanced speed
+    // Balanced Speed Frame rate (140ms) makes control significantly smoother and non-erratic
+    snakeInterval = setInterval(stepSnakeGame, 140); 
 }
 
 function generateSnakeFood() {
@@ -166,28 +228,31 @@ function generateSnakeFood() {
         x: Math.floor(Math.random() * (snakeCanvas.width / boxSize)) * boxSize,
         y: Math.floor(Math.random() * (snakeCanvas.height / boxSize)) * boxSize
     };
-    // Ensure food doesn't spawn inside the snake's body
     if (snake.some(part => part.x === snakeFood.x && part.y === snakeFood.y)) generateSnakeFood();
 }
 
 function stepSnakeGame() {
+    // Process input vector safely
+    if (nextDirection === 'LEFT' && snakeDx === 0) { snakeDx = -boxSize; snakeDy = 0; }
+    if (nextDirection === 'UP' && snakeDy === 0) { snakeDx = 0; snakeDy = -boxSize; }
+    if (nextDirection === 'RIGHT' && snakeDx === 0) { snakeDx = boxSize; snakeDy = 0; }
+    if (nextDirection === 'DOWN' && snakeDy === 0) { snakeDx = 0; snakeDy = boxSize; }
+
     if (checkSnakeCollision()) {
         clearInterval(snakeInterval);
-        alert(`💀 Game Over! Your final snake length score was: ${snakeScore}`);
+        alert(`💀 Game Over! Your Score: ${snakeScore}`);
         initSnakeGame(); return;
     }
 
-    // Move Head Forward
     const head = {x: snake[0].x + snakeDx, y: snake[0].y + snakeDy};
     snake.unshift(head);
 
-    // Check if snake ate food
     if (head.x === snakeFood.x && head.y === snakeFood.y) {
         snakeScore += 10;
         document.getElementById('snake-score').innerText = snakeScore;
         generateSnakeFood();
     } else {
-        snake.pop(); // Remove tail segment to simulate normal movement
+        snake.pop(); 
     }
 
     drawSnakeGrid();
@@ -195,26 +260,23 @@ function stepSnakeGame() {
 
 function drawSnakeGrid() {
     sCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-    
-    // Draw Food
     sCtx.fillStyle = '#ef4444';
     sCtx.fillRect(snakeFood.x, snakeFood.y, boxSize - 1, boxSize - 1);
     
-    // Draw Snake
     snake.forEach((part, idx) => {
-        sCtx.fillStyle = idx === 0 ? '#10b981' : '#34d399'; // Head is darker green
+        sCtx.fillStyle = idx === 0 ? '#10b981' : '#34d399'; 
         sCtx.fillRect(part.x, part.y, boxSize - 1, boxSize - 1);
     });
 }
 
 function changeSnakeDirection(dir) {
-    if (dir === 'LEFT' && snakeDx === 0) { snakeDx = -boxSize; snakeDy = 0; }
-    if (dir === 'UP' && snakeDy === 0) { snakeDx = 0; snakeDy = -boxSize; }
-    if (dir === 'RIGHT' && snakeDx === 0) { snakeDx = boxSize; snakeDy = 0; }
-    if (dir === 'DOWN' && snakeDy === 0) { snakeDx = 0; snakeDy = boxSize; }
+    // Buffer inputs to prevent self-collision via immediate reverse commands
+    if (dir === 'LEFT' && snakeDx === 0) nextDirection = 'LEFT';
+    if (dir === 'UP' && snakeDy === 0) nextDirection = 'UP';
+    if (dir === 'RIGHT' && snakeDx === 0) nextDirection = 'RIGHT';
+    if (dir === 'DOWN' && snakeDy === 0) nextDirection = 'DOWN';
 }
 
-// Physical Arrow Key Hooks for PC Players
 document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') changeSnakeDirection('LEFT');
     if (e.key === 'ArrowUp') changeSnakeDirection('UP');
@@ -224,9 +286,7 @@ document.addEventListener('keydown', (e) => {
 
 function checkSnakeCollision() {
     const head = snake[0];
-    // Wall limits hit detection
     if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height) return true;
-    // Tail bite detection
     for (let i = 1; i < snake.length; i++) {
         if (head.x === snake[i].x && head.y === snake[i].y) return true;
     }
