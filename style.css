@@ -1,78 +1,48 @@
 body {
   margin: 0;
   font-family: Arial;
-  background: linear-gradient(135deg, #0f172a, #1e293b, #0b1220);
+  background: linear-gradient(135deg,#0f172a,#1e293b);
   color: white;
   text-align: center;
 }
 
-.glass {
-  max-width: 850px;
-  margin: auto;
+.screen {
+  display: none;
   padding: 20px;
 }
 
-header {
-  margin-bottom: 20px;
-}
-
-h1 {
-  font-size: 45px;
-  background: linear-gradient(90deg, #22d3ee, #3b82f6, #a855f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.stats {
-  color: #94a3b8;
-}
-
-.card {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(12px);
-  padding: 18px;
-  margin: 15px 0;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.1);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 25px rgba(59,130,246,0.3);
-}
-
-input {
-  width: 90%;
-  padding: 10px;
-  margin: 5px;
-  border-radius: 10px;
-  border: none;
-  outline: none;
+.active {
+  display: block;
 }
 
 button {
-  width: 45%;
   padding: 10px;
   margin: 5px;
-  border: none;
+  width: 200px;
   border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  background: linear-gradient(90deg, #3b82f6, #22d3ee);
+  border: none;
+  background: #3b82f6;
   color: white;
+  cursor: pointer;
 }
 
 button:hover {
-  transform: scale(1.05);
+  background: #2563eb;
 }
 
-.sleep { border-left: 5px solid #22c55e; }
-.ai { border-left: 5px solid #38bdf8; }
-.food { border-left: 5px solid #f59e0b; }
-.challenge { border-left: 5px solid #a855f7; }
+input, textarea, select {
+  width: 80%;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+}
 
-#congrats {
-  color: #22c55e;
-  font-weight: bold;
+.back {
+  background: #ef4444;
+}
+
+canvas {
+  background: white;
+  width: 300px;
+  height: 200px;
 }
