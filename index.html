@@ -2,61 +2,99 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>EduWell AI Supreme</title>
+<title>EduLife AI</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="glass">
+<!-- HOME -->
+<div id="home" class="screen active">
 
-  <header>
-    <h1>EduWell AI ⚡</h1>
-    <p>AI Health • Learning • Motivation</p>
+  <h1>EduLife AI 🧠✨</h1>
+  <p>Select your world</p>
 
-    <div class="stats">
-      XP: <span id="xp">0</span> | Level: <span id="level">1</span>
-    </div>
-  </header>
+  <button onclick="openSection('health')">💙 Health</button>
+  <button onclick="openSection('study')">📚 Study</button>
+  <button onclick="openSection('fun')">🎮 Fun</button>
 
-  <!-- 😴 SLEEP -->
-  <section class="card sleep">
-    <h2>😴 Sleep Motivation</h2>
-    <button onclick="sleepMotivation()">Check Sleep</button>
-    <button onclick="downloadSleep()">Download</button>
-    <p id="sleepMsg"></p>
-  </section>
+</div>
 
-  <!-- 📚 AI -->
-  <section class="card ai">
-    <h2>📚 AI Lesson Explainer</h2>
-    <input id="lessonInput" placeholder="Write any lesson">
-    <button onclick="generateSummary()">Generate AI</button>
-    <button onclick="downloadSummary()">Download</button>
-    <p id="summaryResult"></p>
-  </section>
+<!-- HEALTH -->
+<div id="health" class="screen">
 
-  <!-- 🥗 FOOD -->
-  <section class="card food">
-    <h2>🥗 Food AI</h2>
-    <input id="foodInput" placeholder="Enter food">
-    <button onclick="checkFood()">Analyze</button>
-    <button onclick="downloadFood()">Download</button>
-    <p id="foodResult"></p>
-  </section>
+  <button class="back" onclick="backHome()">⬅ Back</button>
 
-  <!-- 🏆 CHALLENGES -->
-  <section class="card challenge">
-    <h2>🏆 Challenges</h2>
+  <h2>Health AI 💙</h2>
 
-    <label><input type="checkbox" onchange="checkDone()"> Drink Water</label><br>
-    <label><input type="checkbox" onchange="checkDone()"> Sleep Early</label><br>
-    <label><input type="checkbox" onchange="checkDone()"> Exercise</label>
+  <input id="sleep" placeholder="Sleep hours">
+  <input id="work" placeholder="Study/Work hours">
+  <input id="stress" placeholder="Do you feel stress? (yes/no)">
+  <textarea id="problem" placeholder="Describe your problem"></textarea>
 
-    <p id="congrats"></p>
+  <button onclick="healthAI()">Analyze AI</button>
 
-    <button onclick="downloadChallenge()">Download Progress</button>
-  </section>
+  <p id="healthResult"></p>
+
+  <h3>Daily Tasks 🏆</h3>
+
+  <label><input type="checkbox" onchange="checkHealthTasks()"> Drink Water</label><br>
+  <label><input type="checkbox" onchange="checkHealthTasks()"> Sleep 8 Hours</label><br>
+  <label><input type="checkbox" onchange="checkHealthTasks()"> Read 1 Page</label><br>
+
+  <p id="healthCongrats"></p>
+
+</div>
+
+<!-- STUDY -->
+<div id="study" class="screen">
+
+  <button class="back" onclick="backHome()">⬅ Back</button>
+
+  <h2>Study Zone 📚</h2>
+
+  <button onclick="startTimer()">Start Pomodoro</button>
+  <p id="timer"></p>
+
+  <hr>
+
+  <h3>Math Challenge 🔢</h3>
+  <p id="question"></p>
+  <input id="answer">
+  <button onclick="checkMath()">Check</button>
+
+  <hr>
+
+  <h3>World Info 🌍</h3>
+  <select onchange="countryInfo(this.value)">
+    <option value="">Select Country</option>
+    <option value="morocco">Morocco</option>
+    <option value="france">France</option>
+    <option value="japan">Japan</option>
+  </select>
+
+  <p id="countryText"></p>
+
+</div>
+
+<!-- FUN -->
+<div id="fun" class="screen">
+
+  <button class="back" onclick="backHome()">⬅ Back</button>
+
+  <h2>Fun Zone 🎮</h2>
+
+  <canvas id="board"></canvas>
+  <br>
+  <button onclick="clearBoard()">Clear</button>
+
+  <hr>
+
+  <h3>Word Builder 🔤</h3>
+  <p id="letters"></p>
+  <input id="word">
+  <button onclick="checkWord()">Check Word</button>
+  <p id="wordResult"></p>
 
 </div>
 
